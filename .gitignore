@@ -130,3 +130,5 @@ dmypy.json
 node_modules
 .next
 .DS_Store
+out/
+infrastructure/.terraform
