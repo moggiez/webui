@@ -1,0 +1,49 @@
+{
+  "name": "my-divjoy-project",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "divjoy"
+  ],
+  "dependencies": {
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "next": "10.0.5",
+    "@zeit/next-sass": "0.2.1-canary.4",
+    "react-hook-form": "6.15.1",
+    "node-sass": "4.14.1",
+    "react-bootstrap": "1.0.0-beta.16",
+    "bootstrap": "4.4.1",
+    "query-string": "6.13.8",
+    "fake-auth": "0.1.7",
+    "@stripe/stripe-js": "1.11.0",
+    "stripe": "8.132.0",
+    "raw-body": "2.4.1",
+    "mailchimp-api-v3": "1.14.0",
+    "aws-sdk": "2.601.0",
+    "analytics": "0.3.1",
+    "@analytics/google-analytics": "0.2.2"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build-static": "next build && next export",
+    "start": "next start",
+    "stripe-webhook": "stripe listen --forward-to localhost:3000/api/stripe-webhook"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
