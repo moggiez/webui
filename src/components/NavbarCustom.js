@@ -54,11 +54,18 @@ function NavbarCustom(props) {
             )}
 
             {!auth.user && (
+              <>
+              <Nav.Item>
+                <Link href="/dashboard" passHref={true}>
+                  <Nav.Link active={false}>Dashboard</Nav.Link>
+                </Link>
+              </Nav.Item>
               <Nav.Item>
                 <Link href="/auth/signin" passHref={true}>
                   <Nav.Link active={false}>Sign in</Nav.Link>
                 </Link>
               </Nav.Item>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>
