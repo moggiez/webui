@@ -7,8 +7,8 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import https from "https";
-import querystring from "querystring";
+import Toast from "react-bootstrap/Toast";
+import axios from "axios";
 
 function DashboardPage(props) {
   const defaultPlaybook = {
@@ -26,39 +26,32 @@ function DashboardPage(props) {
       }
     }
   }
+  const msgSuccess = "Great success!";
+  const msgFailure = "Oh no!";
   const [playbook, setPlaybook] = useState(defaultPlaybook);
+  const [toastShown, setToastShown] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   
   const runPlaybook = () => {    
-    const postData = querystring.stringify(playbook.workflow.payload);
     makeRequest(
-      postData,
-      data => console.log("Successfully ran playbook!"),
-      err => console.log("Failure to run playbook", err)
+      playbook.workflow.payload,
+      response => {
+        console.log("Successfully ran playbook!");
+        setToastMessage(msgSuccess);
+        setToastShown(true);
+      },
+      err => {
+        console.log("Failure to run playbook", err);
+        setToastMessage(msgFailure);
+        setToastShown(true);
+      }
     );
   }
 
-  const makeRequest = (data, onSuccess, onError) => {
-
-    const options = {
-      hostname: "frfjmlbr81.execute-api.eu-west-1.amazonaws.com",
-      port: 443,
-      path: "/prod",
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
-
-    }
-
-    const processResponse = (res) => {
-      let buffer = "";
-      res.on("data", (chunk) => (buffer += chunk));
-      res.on("end", () => onSuccess(res.statusCode, buffer));
-    };
-    const req = https.request(options, processResponse);
-    req.on("error", (e) => onError(e.message));
-    req.end();
+  const makeRequest = (postData, onSuccess, onError) => {
+    axios.post("https://l9sbd4f7s9.execute-api.eu-west-1.amazonaws.com/v1_1/loadtest", postData)
+    .then(response => onSuccess(response))
+    .catch(error => onError(error));
   }
 
   const loadPlaybook = () => {
@@ -80,6 +73,9 @@ function DashboardPage(props) {
           spaced={true}
           className="text-center"
         />
+        <Toast onClose={() => setToastShown(false)} show={toastShown} delay={3000} autohide>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
         <Row>
           <Col lg={6}>            
             <Card>
