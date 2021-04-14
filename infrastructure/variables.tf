@@ -8,14 +8,18 @@ variable "region" {
   default = "eu-west-1"
 }
 
-variable "website_bucket_name" {
-  type    = string
-  default = "moggiez-web-ui"
+variable "domain_name" {
+  type        = string
+  description = "The domain name for the website."
 }
 
-variable "domain_name" {
-  type    = string
-  default = "moggies.com"
+variable "bucket_name" {
+  type        = string
+  description = "The name of the bucket without the www. prefix. Normally domain_name."
+}
+
+variable "common_tags" {
+  description = "Common tags you want applied to all components."
 }
 
 variable "upload_directory" {

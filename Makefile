@@ -9,7 +9,7 @@ infra-debug:
 deploy: build-static
 	cd infrastructure && terraform init && terraform apply -auto-approve
 preview: build-static
-	cd infrastructure && terraform init && terraform apply -auto-approve
+	cd infrastructure && terraform init && terraform plan
 fmt:
 	cd infrastructure && terraform fmt
 undeploy:

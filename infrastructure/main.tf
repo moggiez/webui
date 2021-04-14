@@ -1,13 +1,19 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
     }
   }
 }
 
 provider "aws" {
   region = var.region
+}
+
+provider "aws" {
+  alias  = "acm_provider"
+  region = "us-east-1"
 }
 
 locals {
@@ -26,49 +32,9 @@ locals {
   }
 }
 
-resource "aws_s3_bucket" "ui_bucket" {
-  bucket = var.website_bucket_name
-  acl    = "public-read"
-
-  tags = {
-    Project     = var.application
-    Name        = "Website"
-    Environment = "production"
-  }
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT", "POST"]
-    allowed_origins = ["*"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
-  }
-  policy = jsonencode(
-    {
-      "Version" : "2008-10-17",
-      "Statement" : [
-        {
-          "Sid" : "PublicReadForGetBucketObjects",
-          "Effect" : "Allow",
-          "Principal" : {
-            "AWS" : "*"
-          },
-          "Action" : "s3:GetObject",
-          "Resource" : "arn:aws:s3:::${var.website_bucket_name}/*"
-        }
-      ]
-    }
-  )
-
-  website {
-    index_document = "index.html"
-    error_document = "404.html"
-  }
-}
-
 resource "aws_s3_bucket_object" "static_files" {
   for_each     = fileset(var.upload_directory, "**/*.*")
-  bucket       = aws_s3_bucket.ui_bucket.id
+  bucket       = aws_s3_bucket.www_bucket.id
   key          = each.value
   source       = "${var.upload_directory}/${each.value}"
   acl          = "public-read"
