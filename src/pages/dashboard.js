@@ -140,11 +140,12 @@ function DashboardPage(props) {
                   <div>Loading...</div>
                 ) : (
                   <ListGroup>
-                    {customerPlaybooks.map((playbook) => (
-                      <ListGroup.Item action onClick={loadPlaybook}>
-                        {playbook.Playbook.name}
-                      </ListGroup.Item>
-                    ))}
+                    {customerPlaybooks &&
+                      customerPlaybooks.map((playbook) => (
+                        <ListGroup.Item action onClick={loadPlaybook}>
+                          {playbook.Playbook.name}
+                        </ListGroup.Item>
+                      ))}
                   </ListGroup>
                 )}
               </Card.Body>
