@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import Container from "react-bootstrap/Container";
@@ -9,6 +9,8 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Toast from "react-bootstrap/Toast";
 import axios from "axios";
+
+const playbookApiUrl = "https://api.moggies.io/playbook";
 
 function DashboardPage(props) {
   const defaultPlaybook = {
@@ -32,8 +34,14 @@ function DashboardPage(props) {
       ],
     },
   };
+
   const msgSuccess = "Great success!";
   const msgFailure = "Oh no!";
+
+  // State
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [customerPlaybooks, setCustomerPlaybooks] = useState(null);
   const [playbook, setPlaybook] = useState(defaultPlaybook);
   const [toastShown, setToastShown] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -67,6 +75,28 @@ function DashboardPage(props) {
   const loadPlaybook = () => {
     alert("Still under construction");
   };
+
+  const getCustomerPlaybooks = (customerId) => {
+    const url = `${playbookApiUrl}/${customerId}`;
+    return fetch(url).then((data) => data.json());
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    setIsLoading(true);
+    getCustomerPlaybooks("default")
+      .then((playbooksData) => {
+        setCustomerPlaybooks(playbooksData.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setCustomerPlaybooks([]);
+        setError(error);
+        setIsLoading(false);
+      });
+    return () => (mounted = false);
+  }, []);
+
   return (
     <Section
       bg={props.bg}
@@ -106,23 +136,17 @@ function DashboardPage(props) {
             <Card>
               <Card.Body>
                 <h5 className="mb-3">Available load test playbooks</h5>
-                <ListGroup>
-                  <ListGroup.Item action onClick={loadPlaybook}>
-                    Cras justo odio
-                  </ListGroup.Item>
-                  <ListGroup.Item action onClick={loadPlaybook}>
-                    Dapibus ac facilisis in
-                  </ListGroup.Item>
-                  <ListGroup.Item action onClick={loadPlaybook}>
-                    Morbi leo risus
-                  </ListGroup.Item>
-                  <ListGroup.Item action onClick={loadPlaybook}>
-                    Porta ac consectetur ac
-                  </ListGroup.Item>
-                  <ListGroup.Item action onClick={loadPlaybook}>
-                    Vestibulum at eros
-                  </ListGroup.Item>
-                </ListGroup>
+                {isLoading && customerPlaybooks != null ? (
+                  <div>Loading...</div>
+                ) : (
+                  <ListGroup>
+                    {customerPlaybooks.map((playbook) => (
+                      <ListGroup.Item action onClick={loadPlaybook}>
+                        {playbook.Playbook.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                )}
               </Card.Body>
             </Card>
           </Col>
