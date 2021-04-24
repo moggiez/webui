@@ -10,6 +10,7 @@ import Col from "react-bootstrap/Col";
 const playbookApiUrl = "https://api.moggies.io/playbook";
 
 function ListPlaybooksCard(props) {
+  const [selectedPlaybookId, setSelectedPlaybookId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [customerPlaybooks, setCustomerPlaybooks] = useState(null);
@@ -39,31 +40,37 @@ function ListPlaybooksCard(props) {
     <Card>
       <Card.Body>
         <h5 className="mb-3">Available load test playbooks</h5>
-        {isLoading && customerPlaybooks != null ? (
-          <Spinner animation="border" role="status">
+        {isLoading && !customerPlaybooks ? (
+          <Spinner animation="border" variant="primary" role="status">
             <span className="sr-only">Loading...</span>
           </Spinner>
         ) : (
           <ListGroup>
-            {customerPlaybooks &&
-              customerPlaybooks.map((playbook) => (
-                <ListGroup.Item>
-                  <Container>
-                    <Row>
-                      <Col lg={true}>{playbook.Playbook.name}</Col>
-                      <Col>
+            {customerPlaybooks.map((playbook) => (
+              <ListGroup.Item>
+                <Container>
+                  <Row>
+                    <Col lg={true}>{playbook.Playbook.name}</Col>
+                    <Col>
+                      {selectedPlaybookId != playbook.PlaybookId ? (
                         <Button
-                          onClick={() =>
-                            props.onCardSelected(playbook.Playbook)
-                          }
+                          onClick={() => {
+                            setSelectedPlaybookId(playbook.PlaybookId);
+                            props.onCardSelected(playbook.Playbook);
+                          }}
                         >
-                          load
+                          Select
                         </Button>
-                      </Col>
-                    </Row>
-                  </Container>
-                </ListGroup.Item>
-              ))}
+                      ) : (
+                        <Button disabled variant="secondary">
+                          Selected
+                        </Button>
+                      )}
+                    </Col>
+                  </Row>
+                </Container>
+              </ListGroup.Item>
+            ))}
           </ListGroup>
         )}
       </Card.Body>
