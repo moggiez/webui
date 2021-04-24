@@ -1,16 +1,18 @@
-build-static:
-	NEXT_PUBLIC_GA_TRACKING_ID=123 npm run build-static
-deploy:
-	echo "Under construction!"
 infra-init:
 	cd infrastructure && terraform init
+init-waypoint:
+	waypoint init && docker pull hashicorp/waypoint:latest && waypoint install --platform=docker -accept-tos
 infra-debug:
 	cd infrastructure && TF_LOG=DEBUG terraform apply -auto-approve infra
-deploy: build-static
+deploy-infra:
 	cd infrastructure && terraform init && terraform apply -auto-approve
-preview: build-static
+preview-infra:
 	cd infrastructure && terraform init && terraform plan
 fmt:
 	cd infrastructure && terraform fmt
-undeploy:
+destroy-infra:
 	cd infrastructure && terraform destroy
+deploy:
+	waypoint up
+destroy:
+	waypoint destroy
