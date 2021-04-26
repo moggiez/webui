@@ -9,7 +9,8 @@ import PlaybookPreviewCard from "../components/PlaybookPreviewCard";
 import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
 import Toast from "react-bootstrap/Toast";
-import axios from "axios";
+
+import loadtestService from "../services/loadtestService";
 
 function DashboardPage(props) {
   const msgSuccess = "Great success!";
@@ -21,8 +22,8 @@ function DashboardPage(props) {
   const [toastMessage, setToastMessage] = useState("");
 
   const runPlaybook = () => {
-    makeRequest(
-      playbook.workflow,
+    loadtestService.triggerLoadTest(
+      playbook,
       (response) => {
         console.log("Successfully ran playbook!");
         setToastMessage(msgSuccess);
@@ -34,16 +35,6 @@ function DashboardPage(props) {
         setToastShown(true);
       }
     );
-  };
-
-  const makeRequest = (postData, onSuccess, onError) => {
-    axios
-      .post(
-        "https://l9sbd4f7s9.execute-api.eu-west-1.amazonaws.com/v1_1/loadtest",
-        postData
-      )
-      .then((response) => onSuccess(response))
-      .catch((error) => onError(error));
   };
 
   const loadPlaybook = (playbook) => {

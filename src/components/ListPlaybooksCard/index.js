@@ -7,7 +7,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-const playbookApiUrl = "https://api.moggies.io/playbook";
+import playbookService from "../../services/playbookService";
 
 function ListPlaybooksCard(props) {
   const [selectedPlaybookId, setSelectedPlaybookId] = useState(null);
@@ -15,15 +15,11 @@ function ListPlaybooksCard(props) {
   const [error, setError] = useState(null);
   const [customerPlaybooks, setCustomerPlaybooks] = useState(null);
 
-  const getCustomerPlaybooks = (customerId) => {
-    const url = `${playbookApiUrl}/${customerId}`;
-    return fetch(url).then((data) => data.json());
-  };
-
   useEffect(() => {
     let mounted = true;
     setIsLoading(true);
-    getCustomerPlaybooks("default")
+    playbookService
+      .getCustomerPlaybooks("default")
       .then((playbooksData) => {
         setCustomerPlaybooks(playbooksData.data);
         setIsLoading(false);
