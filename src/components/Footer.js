@@ -19,7 +19,7 @@ function Footer(props) {
           <div className="brand left">
             <Link href="/">
               <a>
-                <img src={props.logo} alt="Logo" />
+                <img src={props.logo} alt="Moggies.io logo" />
               </a>
             </Link>
           </div>

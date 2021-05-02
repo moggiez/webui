@@ -10,25 +10,11 @@ import Avatar from "components/Avatar";
 function TeamBiosSection(props) {
   const items = [
     {
-      avatar: "https://uploads.divjoy.com/pravatar-150x-68.jpeg",
-      name: "John Smith",
-      role: "Software Engineer",
+      avatar: "/images/team/georgi.jpg",
+      name: "Georgi Stavrev",
+      role: "Founder",
       bio:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum consequatur numquam aliquam tenetur ad amet inventore hic beatae, quas accusantium perferendis sapiente explicabo.",
-    },
-    {
-      avatar: "https://uploads.divjoy.com/pravatar-150x-35.jpeg",
-      name: "Lisa Zinn",
-      role: "Software Engineer",
-      bio:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum consequatur numquam aliquam tenetur ad amet inventore hic beatae, quas accusantium perferendis sapiente explicabo, corporis totam! Labore reprehenderit beatae magnam animi!",
-    },
-    {
-      avatar: "https://uploads.divjoy.com/pravatar-150x-16.jpeg",
-      name: "Diana Low",
-      role: "Designer",
-      bio:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum consequatur numquam aliquam tenetur ad amet inventore hic beatae, quas accusantium perferendis sapiente explicabo, corporis totam! Labore reprehenderit beatae magnam animi!",
+        "I am the founder of Moggies.io. I've been working in the software industry for over a decade in some great companies. Now I want to use my expertise in building higly scalable websites and APIs to help startups scale their services with confidence.",
     },
   ];
 

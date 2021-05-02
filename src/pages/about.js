@@ -9,10 +9,10 @@ function AboutPage(props) {
         bg="primary"
         textColor="white"
         size="lg"
-        bgImage="https://source.unsplash.com/FyD3OWBuXnY/1600x800"
-        bgImageOpacity={0.2}
-        title="We help you make money"
-        subtitle="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum consequatur numquam aliquam tenetur ad amet inventore hic beatae, quas accusantium perferendis sapiente explicabo, corporis totam!"
+        bgImage="/images/scale.jpg"
+        bgImageOpacity={0.9}
+        title="We help you scale"
+        subtitle="Our cloud-native solution will enable your website and API to scale fast and safely in line with your company's (hyper)growth."
       />
       <TeamBiosSection
         bg="white"

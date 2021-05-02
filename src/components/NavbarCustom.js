@@ -18,7 +18,7 @@ function NavbarCustom(props) {
             <img
               className="d-inline-block align-top"
               src={props.logo}
-              alt="Logo"
+              alt="Moggies.io Logo"
               height="30"
             />
           </Navbar.Brand>
@@ -55,16 +55,16 @@ function NavbarCustom(props) {
 
             {!auth.user && (
               <>
-              <Nav.Item>
-                <Link href="/dashboard" passHref={true}>
-                  <Nav.Link active={false}>Dashboard</Nav.Link>
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link href="/auth/signin" passHref={true}>
-                  <Nav.Link active={false}>Sign in</Nav.Link>
-                </Link>
-              </Nav.Item>
+                <Nav.Item>
+                  <Link href="/dashboard" passHref={true}>
+                    <Nav.Link active={false}>Dashboard</Nav.Link>
+                  </Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Link href="/auth/signin" passHref={true}>
+                    <Nav.Link active={false}>Sign in</Nav.Link>
+                  </Link>
+                </Nav.Item>
               </>
             )}
           </Nav>
