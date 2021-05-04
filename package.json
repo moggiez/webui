@@ -9,6 +9,7 @@
     "@analytics/google-analytics": "0.2.2",
     "@stripe/stripe-js": "1.11.0",
     "@zeit/next-sass": "0.2.1-canary.4",
+    "amazon-cognito-identity-js": "^4.6.0",
     "analytics": "0.3.1",
     "aws-sdk": "2.601.0",
     "axios": "^0.21.1",

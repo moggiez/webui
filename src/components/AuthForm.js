@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
+import UserPool from "../services/UserPool";
 
 function AuthForm(props) {
   const auth = useAuth();
@@ -20,10 +21,18 @@ function AuthForm(props) {
       });
     },
     signup: ({ email, pass }) => {
-      return auth.signup(email, pass).then((user) => {
+      return new Promise((resolve, reject) => {
+        UserPool.signUp(email, pass, [], null, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      }).then((data) =>
         // Call auth complete handler
-        props.onAuth(user);
-      });
+        props.onAuth(data)
+      );
     },
     forgotpass: ({ email }) => {
       return auth.sendPasswordResetEmail(email).then(() => {
