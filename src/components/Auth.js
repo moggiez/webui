@@ -10,12 +10,11 @@ function Auth(props) {
   const [formAlert, setFormAlert] = useState(null);
 
   const handleAuth = (authToken) => {
-    alert("Auth token is: " + authToken);
     router.push(props.afterAuthPath);
   };
 
   const handleConfirmation = () => {
-    router.push(props.afterAuthPath);
+    router.push(props.afterConfirmationPath);
   };
 
   const handleFormAlert = (data) => {

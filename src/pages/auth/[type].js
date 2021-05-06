@@ -19,6 +19,7 @@ function AuthPage(props) {
         }
       }
       afterAuthPath={router.query.next || "/dashboard"}
+      afterConfirmationPath={"/auth/signin"}
     />
   );
 }

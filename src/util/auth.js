@@ -7,6 +7,12 @@ import React, {
 } from "react";
 import queryString from "query-string";
 import fakeAuth from "fake-auth";
+import {
+  UserPool,
+  getUserByUsername,
+  authenticateUser,
+  getCurrentUser,
+} from "../services/auth";
 import { useUser, createUser, updateUser } from "./db";
 import router from "next/router";
 import PageLoader from "./../components/PageLoader";
@@ -37,34 +43,53 @@ export const useAuth = () => {
 function useAuthProvider() {
   // Store auth user object
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
   // Format final user object and merge extra data from database
-  const finalUser = usePrepareUser(user);
-
+  const finalUser = getCurrentUser();
   // Connect analytics session to user
   useIdentifyUser(finalUser);
 
   // Handle response from authentication functions
-  const handleAuth = async (user) => {
-    // Create the user in the database
-    // fake-auth doesn't indicate if they are new so we attempt to create user every time
-    await createUser(user.uid, { email: user.email });
-
-    // Update user in state
+  const handleAuth = async (user, jwtToken) => {
     setUser(user);
+    setToken(jwtToken);
     return user;
   };
 
   const signup = (email, password) => {
-    return fakeAuth
-      .signup(email, password)
-      .then((response) => handleAuth(response.user));
+    return new Promise((resolve, reject) => {
+      UserPool.signUp(email, password, [], null, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          const cognitoUser = result.user;
+          resolve(cognitoUser);
+        }
+      });
+    });
   };
 
   const signin = (email, password) => {
-    return fakeAuth
-      .signin(email, password)
-      .then((response) => handleAuth(response.user));
+    return authenticateUser(email, password).then((user, jwtToken) => {
+      handleAuth(user, jwtToken);
+    });
+  };
+
+  const confirm = (username, confirmationCode) => {
+    return new Promise((resolve, reject) => {
+      getUserByUsername(username).confirmRegistration(
+        confirmationCode,
+        true,
+        (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        }
+      );
+    });
   };
 
   const signinWithProvider = (name) => {
@@ -74,7 +99,10 @@ function useAuthProvider() {
   };
 
   const signout = () => {
-    return fakeAuth.signout();
+    return new Promise((resolve, reject) => {
+      getCurrentUser().signOut();
+      resolve();
+    });
   };
 
   const sendPasswordResetEmail = (email) => {
@@ -120,7 +148,7 @@ function useAuthProvider() {
     }
 
     // Persist all data to the database
-    await updateUser(user.uid, data);
+    await updateUser(user.username, data);
 
     // Update user in state
     const currentUser = await fakeAuth.getCurrentUser();
@@ -144,6 +172,7 @@ function useAuthProvider() {
   return {
     user: finalUser,
     signup,
+    confirm,
     signin,
     signinWithProvider,
     signout,
@@ -157,65 +186,15 @@ function useAuthProvider() {
 
 // Format final user object and merge extra data from database
 function usePrepareUser(user) {
-  // Fetch extra data from database (if enabled and auth user has been fetched)
-  const userDbQuery = useUser(MERGE_DB_USER && user && user.uid);
-
   // Memoize so we only create a new object if user or userDbQuery changes
   return useMemo(() => {
     // Return if auth user is null (loading) or false (not authenticated)
     if (!user) return user;
 
-    // Data we want to include from auth user object
-    let finalUser = {
-      uid: user.uid,
-      email: user.email,
-      name: user.name,
-      picture: user.picture,
-    };
-
-    // Include an array of user's auth providers, such as ["password", "google", etc]
-    // Components can read this to prompt user to re-auth with the correct provider
     finalUser.providers = [user.provider];
 
-    // If merging user data from database is enabled ...
-    if (MERGE_DB_USER) {
-      switch (userDbQuery.status) {
-        case "idle":
-          // Return null user until we have db data to merge
-          return null;
-        case "loading":
-          return null;
-        case "error":
-          // Log query error to console
-          console.error(userDbQuery.error);
-          return null;
-        case "success":
-          // If user data doesn't exist we assume this means user just signed up and the createUser
-          // function just hasn't completed. We return null to indicate a loading state.
-          if (userDbQuery.data === null) return null;
-
-          // Merge user data from database into finalUser object
-          Object.assign(finalUser, userDbQuery.data);
-
-          // Get values we need for setting up some custom fields below
-          const { stripePriceId, stripeSubscriptionStatus } = userDbQuery.data;
-
-          // Add planId field (such as "basic", "premium", etc) based on stripePriceId
-          if (stripePriceId) {
-            finalUser.planId = getFriendlyPlanId(stripePriceId);
-          }
-
-          // Add planIsActive field and set to true if subscription status is "active" or "trialing"
-          finalUser.planIsActive = ["active", "trialing"].includes(
-            stripeSubscriptionStatus
-          );
-
-        // no default
-      }
-    }
-
     return finalUser;
-  }, [user, userDbQuery]);
+  }, [user]);
 }
 
 // A Higher Order Component for requiring authentication
@@ -226,7 +205,7 @@ export const requireAuth = (Component) => {
 
     useEffect(() => {
       // Redirect if not signed in
-      if (auth.user === false) {
+      if (auth.user === false || auth.user == null) {
         router.replace("/auth/signin");
       }
     }, [auth]);
@@ -246,7 +225,7 @@ export const requireAuth = (Component) => {
 function useIdentifyUser(user) {
   useEffect(() => {
     if (ANALYTICS_IDENTIFY && user) {
-      analytics.identify(user.uid);
+      analytics.identify(user.username);
     }
   }, [user]);
 }

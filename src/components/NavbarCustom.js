@@ -6,9 +6,11 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useAuth } from "util/auth.js";
+import { useRouter } from "next/router";
 
 function NavbarCustom(props) {
   const auth = useAuth();
+  const router = useRouter();
 
   return (
     <Navbar bg={props.bg} variant={props.variant} expand={props.expand}>
@@ -44,7 +46,9 @@ function NavbarCustom(props) {
                     active={false}
                     onClick={(e) => {
                       e.preventDefault();
-                      auth.signout();
+                      auth
+                        .signout()
+                        .then(() => router.push(props.signoutRoute));
                     }}
                   >
                     Sign out

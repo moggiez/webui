@@ -66,6 +66,7 @@ function AuthSection(props) {
           typeValues={typeValues}
           providers={props.providers}
           afterAuthPath={props.afterAuthPath}
+          afterConfirmationPath={"/auth/signin"}
           key={currentType}
         />
       </Container>

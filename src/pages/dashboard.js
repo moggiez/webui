@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import { requireAuth } from "util/auth.js";
 import PlaybookPreviewCard from "../components/PlaybookPreviewCard";
 import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
@@ -78,4 +79,4 @@ function DashboardPage(props) {
   );
 }
 
-export default DashboardPage;
+export default requireAuth(DashboardPage);

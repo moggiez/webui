@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <>
         <NavbarCustom
+          signoutRoute="/"
           bg="white"
           variant="light"
           expand="md"

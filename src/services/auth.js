@@ -11,6 +11,10 @@ const UserPool = new CognitoUserPool({
   ClientId: clientId,
 });
 
+const getCurrentUser = () => {
+  return UserPool.getCurrentUser();
+};
+
 const getUserByUsername = (username) => {
   return new CognitoUser({
     Pool: UserPool,
@@ -29,11 +33,11 @@ const authenticateUser = (username, password) => {
     user.authenticateUser(authDetails, {
       onSuccess: (result) => {
         const accessToken = result.getAccessToken().getJwtToken();
-        resolve(accessToken);
+        resolve(user, accessToken);
       },
       onFailure: (err) => reject(err),
     });
   });
 };
 
-export { UserPool, getUserByUsername, authenticateUser };
+export { UserPool, getUserByUsername, authenticateUser, getCurrentUser };

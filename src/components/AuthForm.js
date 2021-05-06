@@ -5,11 +5,6 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
-import {
-  UserPool,
-  getUserByUsername,
-  authenticateUser,
-} from "../services/auth";
 
 function AuthForm(props) {
   const auth = useAuth();
@@ -19,23 +14,12 @@ function AuthForm(props) {
 
   const submitHandlersByType = {
     signin: ({ email, pass }) => {
-      return authenticateUser(email, pass).then((jwtToken) => {
+      return auth.signin(email, pass).then((jwtToken) => {
         props.onAuth(jwtToken);
       });
     },
     signup: ({ email, pass }) => {
-      return new Promise((resolve, reject) => {
-        UserPool.signUp(email, pass, [], null, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      }).then((data) =>
-        // Call auth complete handler
-        props.onAuth(data)
-      );
+      return auth.signup(email, pass).then((data) => props.onAuth(data));
     },
     confirm: ({}) => {
       return new Promise((resolve, reject) => {
@@ -43,7 +27,7 @@ function AuthForm(props) {
         resolve("Great success!");
       }).then((data) =>
         // Call auth complete handler
-        props.onAuth(data)
+        props.onConfirmation(data)
       );
     },
     forgotpass: ({ email }) => {
@@ -89,24 +73,41 @@ function AuthForm(props) {
 
   useEffect(() => {
     if (props.type == "confirm") {
-      new Promise((resolve, reject) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        getUserByUsername(urlParams.get("user_name")).confirmRegistration(
-          urlParams.get("confirmation_code"),
-          true,
-          (err, data) => {
-            if (err) {
-              console.log("Confirmaation error: " + JSON.stringify(err));
-              reject(err);
-            } else {
-              console.log("Successful confirmation: " + data);
-              resolve(data);
-            }
-          }
-        );
-      }).then(() => props.onConfirmation());
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get("user_name");
+      const confirmationCode = urlParams.get("confirmation_code");
+      auth
+        .confirm(username, confirmationCode)
+        .then(() => props.onConfirmation())
+        .catch((err) => {
+          props.onFormAlert({ message: err.message, type: "error" });
+        });
     }
   }, []);
+
+  const button = (
+    <Button
+      variant="primary"
+      block={true}
+      size="lg"
+      type="submit"
+      disabled={pending}
+    >
+      {!pending && <span>{props.typeValues.buttonText}</span>}
+
+      {pending && (
+        <Spinner
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden={true}
+          className="align-baseline"
+        >
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      )}
+    </Button>
+  );
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -162,27 +163,8 @@ function AuthForm(props) {
         </Form.Group>
       )}
 
-      <Button
-        variant="primary"
-        block={true}
-        size="lg"
-        type="submit"
-        disabled={pending}
-      >
-        {!pending && <span>{props.typeValues.buttonText}</span>}
-
-        {pending && (
-          <Spinner
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden={true}
-            className="align-baseline"
-          >
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        )}
-      </Button>
+      {["signin", "signup", "changepass", "forgotpass"].includes(props.type) &&
+        button}
     </Form>
   );
 }
