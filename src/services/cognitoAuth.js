@@ -40,4 +40,38 @@ const authenticateUser = (username, password) => {
   });
 };
 
-export { UserPool, getUserByUsername, authenticateUser, getCurrentUser };
+const forgotPassword = (email) => {
+  return new Promise((resolve, reject) => {
+    const userData = {
+      Username: email,
+      Pool: UserPool,
+    };
+    const user = new CognitoUser(userData);
+    user.forgotPassword({
+      onSuccess: function (data) {
+        resolve(data);
+      },
+      onFailure: function (err) {
+        reject(err);
+      },
+    });
+  });
+};
+
+const changePassword = (username, password, verificationCode) => {
+  return new Promise((resolve, reject) =>
+    getUserByUsername(username).confirmPassword(verificationCode, password, {
+      onSuccess: () => resolve(),
+      onFailure: (err) => reject(err),
+    })
+  );
+};
+
+export {
+  UserPool,
+  getUserByUsername,
+  authenticateUser,
+  getCurrentUser,
+  forgotPassword,
+  changePassword,
+};

@@ -12,7 +12,9 @@ import {
   getUserByUsername,
   authenticateUser,
   getCurrentUser,
-} from "../services/auth";
+  forgotPassword,
+  changePassword,
+} from "../services/cognitoAuth";
 import { useUser, createUser, updateUser } from "./db";
 import router from "next/router";
 import PageLoader from "./../components/PageLoader";
@@ -106,17 +108,13 @@ function useAuthProvider() {
   };
 
   const sendPasswordResetEmail = (email) => {
-    return fakeAuth.sendPasswordResetEmail(email);
+    return forgotPassword(email);
   };
 
   const confirmPasswordReset = (password, code) => {
-    // [INTEGRATING AN AUTH SERVICE]: If not passing in "code" as the second
-    // arg above then make sure getFromQueryString() below has the correct
-    // url parameter name (it might not be "code").
-
-    // Get code from query string object
-    const resetCode = code || getFromQueryString("code");
-    return fakeAuth.confirmPasswordReset(password, resetCode);
+    const username = getFromQueryString("user_name");
+    const resetCode = code || getFromQueryString("confirmation_code");
+    return changePassword(username, password, resetCode);
   };
 
   const updateEmail = (email) => {
