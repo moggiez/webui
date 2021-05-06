@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import FormField from "components/FormField";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
-import UserPool from "../services/UserPool";
+import {
+  UserPool,
+  getUserByUsername,
+  authenticateUser,
+} from "../services/auth";
 
 function AuthForm(props) {
   const auth = useAuth();
@@ -15,9 +19,8 @@ function AuthForm(props) {
 
   const submitHandlersByType = {
     signin: ({ email, pass }) => {
-      return auth.signin(email, pass).then((user) => {
-        // Call auth complete handler
-        props.onAuth(user);
+      return authenticateUser(email, pass).then((jwtToken) => {
+        props.onAuth(jwtToken);
       });
     },
     signup: ({ email, pass }) => {
@@ -29,6 +32,15 @@ function AuthForm(props) {
             resolve(data);
           }
         });
+      }).then((data) =>
+        // Call auth complete handler
+        props.onAuth(data)
+      );
+    },
+    confirm: ({}) => {
+      return new Promise((resolve, reject) => {
+        alert("Confirm!");
+        resolve("Great success!");
       }).then((data) =>
         // Call auth complete handler
         props.onAuth(data)
@@ -74,6 +86,27 @@ function AuthForm(props) {
       });
     });
   };
+
+  useEffect(() => {
+    if (props.type == "confirm") {
+      new Promise((resolve, reject) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        getUserByUsername(urlParams.get("user_name")).confirmRegistration(
+          urlParams.get("confirmation_code"),
+          true,
+          (err, data) => {
+            if (err) {
+              console.log("Confirmaation error: " + JSON.stringify(err));
+              reject(err);
+            } else {
+              console.log("Successful confirmation: " + data);
+              resolve(data);
+            }
+          }
+        );
+      }).then(() => props.onConfirmation());
+    }
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

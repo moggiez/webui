@@ -21,6 +21,10 @@ function AuthSection(props) {
       buttonText: "Sign up",
       linkTextSignin: "Sign in",
     },
+    confirm: {
+      title: "Confirm your account",
+      buttonText: "Confirm",
+    },
     forgotpass: {
       title: "Get a new password",
       buttonText: "Reset password",

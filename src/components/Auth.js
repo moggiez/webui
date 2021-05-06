@@ -9,7 +9,12 @@ function Auth(props) {
   const router = useRouter();
   const [formAlert, setFormAlert] = useState(null);
 
-  const handleAuth = (user) => {
+  const handleAuth = (authToken) => {
+    alert("Auth token is: " + authToken);
+    router.push(props.afterAuthPath);
+  };
+
+  const handleConfirmation = () => {
     router.push(props.afterAuthPath);
   };
 
@@ -28,6 +33,7 @@ function Auth(props) {
         typeValues={props.typeValues}
         onAuth={handleAuth}
         onFormAlert={handleFormAlert}
+        onConfirmation={handleConfirmation}
       />
 
       {["signup", "signin"].includes(props.type) && (
