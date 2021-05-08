@@ -8,8 +8,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import playbookService from "../../services/playbookService";
+import { useAuth } from "../../util/auth";
 
 function ListPlaybooksCard(props) {
+  const auth = useAuth();
   const [selectedPlaybookId, setSelectedPlaybookId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +21,7 @@ function ListPlaybooksCard(props) {
     let mounted = true;
     setIsLoading(true);
     playbookService
-      .getCustomerPlaybooks("default")
+      .getCustomerPlaybooks("default", auth.getCurrentUser())
       .then((playbooksData) => {
         setCustomerPlaybooks(playbooksData.data);
         setIsLoading(false);

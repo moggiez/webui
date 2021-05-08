@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useContext,
-  createContext,
-} from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import queryString from "query-string";
 import fakeAuth from "fake-auth";
 import {
@@ -179,20 +173,8 @@ function useAuthProvider() {
     updateEmail,
     updatePassword,
     updateProfile,
+    getCurrentUser,
   };
-}
-
-// Format final user object and merge extra data from database
-function usePrepareUser(user) {
-  // Memoize so we only create a new object if user or userDbQuery changes
-  return useMemo(() => {
-    // Return if auth user is null (loading) or false (not authenticated)
-    if (!user) return user;
-
-    finalUser.providers = [user.provider];
-
-    return finalUser;
-  }, [user]);
 }
 
 // A Higher Order Component for requiring authentication

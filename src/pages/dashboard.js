@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { requireAuth } from "util/auth.js";
+import { requireAuth, useAuth } from "util/auth.js";
 import PlaybookPreviewCard from "../components/PlaybookPreviewCard";
 import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
@@ -14,6 +14,7 @@ import Toast from "react-bootstrap/Toast";
 import loadtestService from "../services/loadtestService";
 
 function DashboardPage(props) {
+  const auth = useAuth();
   const msgSuccess = "Great success!";
   const msgFailure = "Oh no!";
 
@@ -24,6 +25,7 @@ function DashboardPage(props) {
 
   const runPlaybook = () => {
     loadtestService.triggerLoadTest(
+      auth.getCurrentUser(),
       playbook,
       (response) => {
         console.log("Successfully ran playbook!");
