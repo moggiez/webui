@@ -23,6 +23,7 @@ function SettingsPage(props) {
 // See https://nextjs.org/docs/basic-features/data-fetching#getstaticpaths-static-generation
 export const getStaticPaths = () => ({
   paths: [
+    { params: { section: "organisation" } },
     { params: { section: "general" } },
     { params: { section: "password" } },
     { params: { section: "billing" } },

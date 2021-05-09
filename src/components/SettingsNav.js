@@ -11,6 +11,11 @@ function SettingsNav(props) {
         </Link>
       </Nav.Item>
       <Nav.Item>
+        <Link href="/settings/organisation" passHref={true}>
+          <Nav.Link eventKey="organisation">Organisation</Nav.Link>
+        </Link>
+      </Nav.Item>
+      <Nav.Item>
         <Link href="/settings/password" passHref={true}>
           <Nav.Link eventKey="password">Password</Nav.Link>
         </Link>

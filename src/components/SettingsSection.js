@@ -5,6 +5,7 @@ import SettingsNav from "components/SettingsNav";
 import Container from "react-bootstrap/Container";
 import FormAlert from "components/FormAlert";
 import SettingsGeneral from "components/SettingsGeneral";
+import SettingsOrganisation from "components/SettingsOrganisation";
 import SettingsPassword from "components/SettingsPassword";
 import SettingsBilling from "components/SettingsBilling";
 import { useAuth } from "util/auth.js";
@@ -21,6 +22,7 @@ function SettingsSection(props) {
 
   const validSections = {
     general: true,
+    organisation: true,
     password: true,
     billing: true,
   };
@@ -82,6 +84,10 @@ function SettingsSection(props) {
         )}
 
         {section === "general" && <SettingsGeneral onStatus={handleStatus} />}
+
+        {section === "organisation" && (
+          <SettingsOrganisation onStatus={handleStatus} />
+        )}
 
         {section === "password" && <SettingsPassword onStatus={handleStatus} />}
 

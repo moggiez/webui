@@ -67,6 +67,25 @@ const changePassword = (username, password, verificationCode) => {
   );
 };
 
+const getUserAttributes = () => {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = UserPool.getCurrentUser();
+    cognitoUser.getSession((err, session) => {
+      if (err) {
+        reject(err);
+      } else {
+        cognitoUser.getUserAttributes((err, attributes) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(attributes);
+          }
+        });
+      }
+    });
+  });
+};
+
 export {
   UserPool,
   getUserByUsername,
@@ -74,4 +93,5 @@ export {
   getCurrentUser,
   forgotPassword,
   changePassword,
+  getUserAttributes,
 };

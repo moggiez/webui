@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import FormField from "components/FormField";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
-import { getUserAttributes } from "services/cognitoAuth";
+import { ListGroup } from "react-bootstrap";
 
-function SettingsGeneral(props) {
+function SettingsOrganisation(props) {
   const auth = useAuth();
   const [pending, setPending] = useState(false);
 
@@ -47,16 +47,10 @@ function SettingsGeneral(props) {
       });
   };
 
-  const [userEmail, setUserEmail] = useState();
-  useEffect(() => {
-    getUserAttributes()
-      .then((attributes) => {
-        setUserEmail(attributes.filter((v, i) => v.Name == "email")[0].Value);
-        console.log(userEmail);
-        console.log(attributes);
-      })
-      .catch((err) => console.log("Error getting user attributes: " + err));
-  }, []);
+  const [organisation, setOrganisation] = useState({
+    name: "Moggies",
+    owner: auth.user.getUsername(),
+  });
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -64,10 +58,10 @@ function SettingsGeneral(props) {
         <FormField
           name="name"
           type="text"
-          label="Name"
-          defaultValue={auth.user.getUsername()}
+          label="Organisation Name"
+          defaultValue={organisation.name}
           disabled
-          placeholder="Name"
+          placeholder="Organisation Name"
           error={errors.name}
           size="lg"
           inputRef={register({
@@ -77,12 +71,14 @@ function SettingsGeneral(props) {
       </Form.Group>
       <Form.Group controlId="formEmail">
         <FormField
-          name="email"
-          type="email"
-          label="Email Address"
-          defaultValue={userEmail}
+          name="owner"
+          type="text"
+          label="Organisation Owner"
+          defaultValue={
+            organisation.owner == auth.user.getUsername() ? "you" : "not you"
+          }
+          placeholder="Who is the owner?"
           disabled
-          placeholder="Email"
           error={errors.email}
           size="lg"
           inputRef={register({
@@ -90,7 +86,14 @@ function SettingsGeneral(props) {
           })}
         />
       </Form.Group>
-      <Button type="submit" size="lg" disabled={pending}>
+      <label>Members</label>
+      <ListGroup>
+        <ListGroup.Item>stavrev.georgi@gmail.com</ListGroup.Item>
+        <ListGroup.Item>georgi@moggies.io</ListGroup.Item>
+        <ListGroup.Item>gabriela@moggies.io</ListGroup.Item>
+      </ListGroup>
+
+      <Button type="submit" size="lg" disabled={pending} className="mt-3">
         <span>Save</span>
 
         {pending && (
@@ -109,4 +112,4 @@ function SettingsGeneral(props) {
   );
 }
 
-export default SettingsGeneral;
+export default SettingsOrganisation;
