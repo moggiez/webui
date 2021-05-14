@@ -78,7 +78,7 @@ const getUserAttributes = () => {
           if (err) {
             reject(err);
           } else {
-            resolve(attributes);
+            resolve({ attributes, session });
           }
         });
       }

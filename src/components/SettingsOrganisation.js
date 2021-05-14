@@ -7,6 +7,8 @@ import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
 import { ListGroup } from "react-bootstrap";
 
+import userService from "../services/userService";
+
 function SettingsOrganisation(props) {
   const auth = useAuth();
   const [pending, setPending] = useState(false);
@@ -51,6 +53,13 @@ function SettingsOrganisation(props) {
     name: "Moggies",
     owner: auth.user.getUsername(),
   });
+
+  useEffect(() => {
+    userService
+      .getUserData(auth.user)
+      .then((data) => console.log("USER DATA", data))
+      .catch((err) => console.log("NO USER DATA ", err));
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
