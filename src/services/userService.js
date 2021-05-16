@@ -1,5 +1,8 @@
 import { getUserAttributes } from "../services/cognitoAuth";
-const userApiURL = "https://api.moggies.io/user";
+import config from "../config";
+import axios from "axios";
+
+const userApiURL = `${config.baseApiUrl}/user`;
 
 const getUserData = (currentUser) => {
   return new Promise((resolve, reject) => {
@@ -7,9 +10,17 @@ const getUserData = (currentUser) => {
       .then(({ attributes, session }) => {
         const userId = attributes.filter((v, i) => v.Name == "sub")[0].Value;
         const url = `${userApiURL}/${userId}`;
-        fetch(url, {
-          headers: { Authorization: session.getIdToken().getJwtToken() },
-        }).then((data) => resolve(data.json()));
+        const config = {
+          headers: {
+            Authorization: session.getIdToken().getJwtToken(),
+          },
+        };
+        axios
+          .get(url, config)
+          .then((response) =>
+            resolve({ userData: response.data.data[0], session })
+          )
+          .catch((error) => rekect(error));
       })
       .catch((err) => reject(err));
   });

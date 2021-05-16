@@ -11,7 +11,8 @@ import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
 import Toast from "react-bootstrap/Toast";
 
-import loadtestService from "../services/loadtestService";
+import loadGeneratorService from "../services/loadGeneratorService";
+import playbookSvc from "../services/playbookService";
 
 function DashboardPage(props) {
   const auth = useAuth();
@@ -24,20 +25,27 @@ function DashboardPage(props) {
   const [toastMessage, setToastMessage] = useState("");
 
   const runPlaybook = () => {
-    loadtestService.triggerLoadTest(
-      auth.getCurrentUser(),
-      playbook,
-      (response) => {
-        console.log("Successfully ran playbook!");
-        setToastMessage(msgSuccess);
-        setToastShown(true);
-      },
-      (err) => {
-        console.log("Failure to run playbook", err);
-        setToastMessage(msgFailure);
-        setToastShown(true);
-      }
-    );
+    if (playbook) {
+      playbookSvc
+        .getPlaybook(playbook.PlaybookId)
+        .then((pb) => {
+          loadGeneratorService.triggerLoadTest(
+            auth.getCurrentUser(),
+            pb,
+            (response) => {
+              console.log("Successfully ran playbook!");
+              setToastMessage(msgSuccess);
+              setToastShown(true);
+            },
+            (err) => {
+              console.log("Failure to run playbook", err);
+              setToastMessage(msgFailure);
+              setToastShown(true);
+            }
+          );
+        })
+        .catch((error) => console.log("Cannot run playbook:", error));
+    }
   };
 
   const loadPlaybook = (playbook) => {

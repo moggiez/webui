@@ -21,9 +21,9 @@ function ListPlaybooksCard(props) {
     let mounted = true;
     setIsLoading(true);
     playbookService
-      .getCustomerPlaybooks("default", auth.getCurrentUser())
-      .then((playbooksData) => {
-        setCustomerPlaybooks(playbooksData.data);
+      .getPlaybooks("default", auth.getCurrentUser())
+      .then((playbooksArray) => {
+        setCustomerPlaybooks(playbooksArray);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -54,7 +54,7 @@ function ListPlaybooksCard(props) {
                         <Button
                           onClick={() => {
                             setSelectedPlaybookId(playbook.PlaybookId);
-                            props.onCardSelected(playbook.Playbook);
+                            props.onCardSelected(playbook);
                           }}
                         >
                           Select

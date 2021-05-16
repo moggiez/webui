@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import PrettyPrintJson from "../../components/PrettyPrintJson";
 
+import playbookSvc from "../../services/playbookService";
+
 function PlaybookPreviewCard(props) {
+  useEffect(() => {
+    if (props.playbook) {
+      playbookSvc
+        .getPlaybook(props.playbook.PlaybookId)
+        .then((pb) => console.log("p", pb))
+        .catch((error) => console.log("error", error));
+    }
+  }, [props]);
+
   return (
     <Card>
       <Card.Body>
         <h5 className="mb-3">
-          Playbook: {props.playbook && props.playbook.name}
+          Playbook: {props.playbook && props.playbook.Playbook.name}
         </h5>
         {props.playbook ? (
           <>

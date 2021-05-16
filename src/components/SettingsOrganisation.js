@@ -57,7 +57,9 @@ function SettingsOrganisation(props) {
   useEffect(() => {
     userService
       .getUserData(auth.user)
-      .then((data) => console.log("USER DATA", data))
+      .then(({ userData, session }) => {
+        console.log("USER DATA", userData, session);
+      })
       .catch((err) => console.log("NO USER DATA ", err));
   }, []);
 
