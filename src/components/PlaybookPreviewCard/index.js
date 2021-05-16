@@ -10,7 +10,7 @@ function PlaybookPreviewCard(props) {
     if (props.playbook) {
       playbookSvc
         .getPlaybook(props.playbook.PlaybookId)
-        .then((pb) => console.log("p", pb))
+        .then(({ playbook, session }) => console.log("p", playbook))
         .catch((error) => console.log("error", error));
     }
   }, [props]);

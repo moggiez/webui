@@ -45,9 +45,7 @@ const getPlaybook = (playbookId, currentUser) => {
         axios
           .get(url, config)
           .then((response) => {
-            const data = response.data;
-            console.log("data", data);
-            resolve(data);
+            resolve({ playbook: response.data, session });
           })
           .catch((error) => reject(error));
       })

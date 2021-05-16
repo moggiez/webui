@@ -28,10 +28,10 @@ function DashboardPage(props) {
     if (playbook) {
       playbookSvc
         .getPlaybook(playbook.PlaybookId)
-        .then((pb) => {
+        .then(({ playbook, session }) => {
           loadGeneratorService.triggerLoadTest(
             auth.getCurrentUser(),
-            pb,
+            playbook,
             (response) => {
               console.log("Successfully ran playbook!");
               setToastMessage(msgSuccess);
