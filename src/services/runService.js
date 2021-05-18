@@ -13,14 +13,13 @@ const triggerLoadTest = (currentUser, playbook) => {
         .then(({ userData, session }) => {
           console.log("got user, will attempt to create loadtest");
           const orgId = userData.OrganisationId;
-          const userId = userData.UserId;
           const config = {
             headers: {
               Authorization: session.getIdToken().getJwtToken(),
             },
           };
           loadtestSvc
-            .create(orgId, playbook.PlaybookId, userId)
+            .create(orgId, playbook.PlaybookId)
             .then((response) => {
               console.log("CREATE RESPONSE", response.data.LoadtestId);
               const url = `${runUrl}/${response.data.LoadtestId}`;

@@ -3,7 +3,7 @@ import config from "../config";
 import { UserPool } from "../services/cognitoAuth";
 const loadtestApiURL = `${config.baseApiUrl}/loadtest`;
 
-const create = (organisationId, playbookId, userId) => {
+const create = (organisationId, playbookId) => {
   const proceedAfterUserSessionObtained = (session, resolve, reject) => {
     const config = {
       headers: {
@@ -12,7 +12,6 @@ const create = (organisationId, playbookId, userId) => {
     };
     const payload = {
       PlaybookId: playbookId,
-      UserId: userId,
     };
     const url = `${loadtestApiURL}/${organisationId}`;
     axios
