@@ -9,9 +9,9 @@ import { requireAuth, useAuth } from "util/auth.js";
 import PlaybookPreviewCard from "../components/PlaybookPreviewCard";
 import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
-import Toast from "react-bootstrap/Toast";
+import Alert from "react-bootstrap/Alert";
 
-import loadGeneratorService from "../services/loadGeneratorService";
+import runSvc from "../services/runService";
 import playbookSvc from "../services/playbookService";
 
 function DashboardPage(props) {
@@ -21,30 +21,36 @@ function DashboardPage(props) {
 
   // State
   const [playbook, setPlaybook] = useState(null);
-  const [toastShown, setToastShown] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [runState, setRunState] = useState({ type: "none", message: "" });
 
-  const runPlaybook = () => {
+  const runPlaybook = (setIsRunEnabled) => {
     if (playbook) {
+      setIsRunEnabled(false);
       playbookSvc
         .getPlaybook(playbook.PlaybookId)
         .then(({ playbook, session }) => {
-          loadGeneratorService.triggerLoadTest(
-            auth.getCurrentUser(),
-            playbook,
-            (response) => {
-              console.log("Successfully ran playbook!");
-              setToastMessage(msgSuccess);
-              setToastShown(true);
-            },
-            (err) => {
-              console.log("Failure to run playbook", err);
-              setToastMessage(msgFailure);
-              setToastShown(true);
-            }
-          );
+          runSvc
+            .triggerLoadTest(auth.getCurrentUser(), playbook)
+            .then((response) => {
+              setRunState({
+                type: "success",
+                message: "Successfully ran playbook!",
+              });
+              setIsRunEnabled(true);
+            })
+            .catch((err) => {
+              console.log();
+              setRunState({
+                type: "danger",
+                message: "Failure to run playbook.",
+              });
+              setIsRunEnabled(true);
+            });
         })
-        .catch((error) => console.log("Cannot run playbook:", error));
+        .catch((error) => {
+          console.log("Cannot run playbook:", error);
+          setIsRunEnabled(true);
+        });
     }
   };
 
@@ -68,14 +74,9 @@ function DashboardPage(props) {
           spaced={true}
           className="text-center"
         />
-        <Toast
-          onClose={() => setToastShown(false)}
-          show={toastShown}
-          delay={3000}
-          autohide
-        >
-          <Toast.Body>{toastMessage}</Toast.Body>
-        </Toast>
+        {runState.type != "none" && !runState.closed && (
+          <Alert variant={runState.type}>{runState.message}</Alert>
+        )}
         <Row>
           <Col lg={6}>
             <PlaybookPreviewCard playbook={playbook} onClick={runPlaybook} />

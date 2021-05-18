@@ -2,24 +2,39 @@ import {
   CognitoUserPool,
   CognitoUser,
   AuthenticationDetails,
+  CookieStorage,
 } from "amazon-cognito-identity-js";
 const userPoolId = "eu-west-1_NwekjaAN1";
 const clientId = "3rckmd7m0bp2mmahu9ieevllu0"; // the cognito client application id
+let domain = ".moggies.io";
+
+if (process.env.NEXT_PUBLIC_DOMAIN) {
+  domain = process.env.NEXT_PUBLIC_DOMAIN;
+}
+const storage = new CookieStorage({
+  domain: domain,
+});
 
 const UserPool = new CognitoUserPool({
   UserPoolId: userPoolId,
   ClientId: clientId,
+  Storage: storage,
 });
+
+const getUserData = (username) => {
+  return {
+    Pool: UserPool,
+    Username: username,
+    Storage: storage,
+  };
+};
 
 const getCurrentUser = () => {
   return UserPool.getCurrentUser();
 };
 
 const getUserByUsername = (username) => {
-  return new CognitoUser({
-    Pool: UserPool,
-    Username: username,
-  });
+  return new CognitoUser(getUserData(username));
 };
 
 const authenticateUser = (username, password) => {
@@ -42,11 +57,7 @@ const authenticateUser = (username, password) => {
 
 const forgotPassword = (email) => {
   return new Promise((resolve, reject) => {
-    const userData = {
-      Username: email,
-      Pool: UserPool,
-    };
-    const user = new CognitoUser(userData);
+    const user = new CognitoUser(getUserData(email));
     user.forgotPassword({
       onSuccess: function (data) {
         resolve(data);

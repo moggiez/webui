@@ -48,6 +48,7 @@ function AuthForm(props) {
           type: "success",
           message: "Your password has been changed",
         });
+        props.onConfirmation();
       });
     },
   };

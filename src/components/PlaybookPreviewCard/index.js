@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import PrettyPrintJson from "../../components/PrettyPrintJson";
@@ -6,11 +6,15 @@ import PrettyPrintJson from "../../components/PrettyPrintJson";
 import playbookSvc from "../../services/playbookService";
 
 function PlaybookPreviewCard(props) {
+  const [runEnabled, setRunEnabled] = useState(false);
   useEffect(() => {
     if (props.playbook) {
       playbookSvc
         .getPlaybook(props.playbook.PlaybookId)
-        .then(({ playbook, session }) => console.log("p", playbook))
+        .then(({ playbook, session }) => {
+          console.log("p", playbook);
+          setRunEnabled(true);
+        })
         .catch((error) => console.log("error", error));
     }
   }, [props]);
@@ -24,9 +28,19 @@ function PlaybookPreviewCard(props) {
         {props.playbook ? (
           <>
             <PrettyPrintJson data={props.playbook} />
-            <Button variant="primary" onClick={props.onClick} className="mt-3">
-              Start load test{" "}
-            </Button>
+            {runEnabled ? (
+              <Button
+                variant="primary"
+                onClick={() => props.onClick(setRunEnabled)}
+                className="mt-3"
+              >
+                Start load test
+              </Button>
+            ) : (
+              <Button disabled variant="secondary" className="mt-3">
+                Start load test
+              </Button>
+            )}
           </>
         ) : (
           <>
