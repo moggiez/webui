@@ -38,7 +38,7 @@ function PlaybookPreviewCard(props) {
               </Button>
             ) : (
               <Button disabled variant="secondary" className="mt-3">
-                Start load test
+                Loading...
               </Button>
             )}
           </>

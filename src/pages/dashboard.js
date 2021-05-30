@@ -4,6 +4,7 @@ import SectionHeader from "components/SectionHeader";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Link from "next/link";
 
 import { requireAuth, useAuth } from "util/auth.js";
 import PlaybookPreviewCard from "../components/PlaybookPreviewCard";
@@ -13,15 +14,16 @@ import Alert from "react-bootstrap/Alert";
 
 import runSvc from "../services/runService";
 import playbookSvc from "../services/playbookService";
+import metricsSvc from "../services/metricsService";
 
 function DashboardPage(props) {
   const auth = useAuth();
-  const msgSuccess = "Great success!";
-  const msgFailure = "Oh no!";
 
   // State
   const [playbook, setPlaybook] = useState(null);
   const [runState, setRunState] = useState({ type: "none", message: "" });
+
+  const [lastLoadtestId, setLastLoadtestId] = useState("");
 
   const runPlaybook = (setIsRunEnabled) => {
     if (playbook) {
@@ -31,12 +33,13 @@ function DashboardPage(props) {
         .then(({ playbook, session }) => {
           runSvc
             .triggerLoadTest(auth.getCurrentUser(), playbook)
-            .then((response) => {
+            .then(({ loadtestId, response }) => {
               setRunState({
                 type: "success",
                 message: "Successfully ran playbook!",
               });
               setIsRunEnabled(true);
+              setLastLoadtestId(loadtestId);
             })
             .catch((err) => {
               console.log();
@@ -76,6 +79,11 @@ function DashboardPage(props) {
         />
         {runState.type != "none" && !runState.closed && (
           <Alert variant={runState.type}>{runState.message}</Alert>
+        )}
+        {lastLoadtestId && (
+          <Link href={`/tests/${lastLoadtestId}`}>
+            <a>Go to loadtest results.</a>
+          </Link>
         )}
         <Row>
           <Col lg={6}>

@@ -11,7 +11,6 @@ const triggerLoadTest = (currentUser, playbook) => {
       userSvc
         .getUserData(currentUser)
         .then(({ userData, session }) => {
-          console.log("got user, will attempt to create loadtest");
           const orgId = userData.OrganisationId;
           const config = {
             headers: {
@@ -21,11 +20,11 @@ const triggerLoadTest = (currentUser, playbook) => {
           loadtestSvc
             .create(orgId, playbook.PlaybookId)
             .then((response) => {
-              console.log("CREATE RESPONSE", response.data.LoadtestId);
+              const loadtestId = response.data.LoadtestId;
               const url = `${runUrl}/${response.data.LoadtestId}`;
               axios
                 .post(url, playbook.Playbook, config)
-                .then((response) => resolve(response))
+                .then((response) => resolve({ loadtestId, response }))
                 .catch((error) => reject(error));
             })
             .catch((err) => reject(err));

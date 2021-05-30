@@ -20,7 +20,7 @@ const getUserData = (currentUser) => {
           .then((response) =>
             resolve({ userData: response.data.data[0], session })
           )
-          .catch((error) => rekect(error));
+          .catch((error) => reject(error));
       })
       .catch((err) => reject(err));
   });
