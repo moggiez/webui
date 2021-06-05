@@ -23,7 +23,7 @@ const triggerLoadTest = (currentUser, playbook) => {
               const loadtestId = response.data.LoadtestId;
               const url = `${runUrl}/${response.data.LoadtestId}`;
               axios
-                .post(url, playbook.Playbook, config)
+                .post(url, {}, config)
                 .then((response) => resolve({ loadtestId, response }))
                 .catch((error) => reject(error));
             })

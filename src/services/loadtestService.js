@@ -1,6 +1,9 @@
 import axios from "axios";
 import config from "../config";
+import HttpClient from "./httpClient";
 import { UserPool } from "../services/cognitoAuth";
+
+const http = new HttpClient();
 const loadtestApiURL = `${config.baseApiUrl}/loadtest`;
 
 const create = (organisationId, playbookId) => {
@@ -37,4 +40,8 @@ const create = (organisationId, playbookId) => {
   });
 };
 
-export default { create };
+const getAll = async (org) => {
+  return await http.get(`${loadtestApiURL}/${org}`);
+};
+
+export default { create, getAll };

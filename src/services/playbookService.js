@@ -1,6 +1,9 @@
 import config from "../config";
 import userSvc from "../services/userService";
 import axios from "axios";
+import HttpClient from "./httpClient";
+
+const http = new HttpClient();
 
 const playbookApiUrl = `${config.baseApiUrl}/playbook`;
 
@@ -53,7 +56,12 @@ const getPlaybook = (playbookId, currentUser) => {
   });
 };
 
+const getAll = async (org) => {
+  return await http.get(`${playbookApiUrl}/${org}`);
+};
+
 export default {
   getPlaybooks: getPlaybooks,
   getPlaybook: getPlaybook,
+  getAll: getAll,
 };

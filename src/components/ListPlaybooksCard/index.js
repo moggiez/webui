@@ -48,7 +48,7 @@ function ListPlaybooksCard(props) {
               <ListGroup.Item key={playbook.PlaybookId}>
                 <Container>
                   <Row>
-                    <Col lg={true}>{playbook.Playbook.name}</Col>
+                    <Col lg={true}>{playbook.Name}</Col>
                     <Col>
                       {selectedPlaybookId != playbook.PlaybookId ? (
                         <Button

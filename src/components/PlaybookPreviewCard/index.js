@@ -23,7 +23,7 @@ function PlaybookPreviewCard(props) {
     <Card>
       <Card.Body>
         <h5 className="mb-3">
-          Playbook: {props.playbook && props.playbook.Playbook.name}
+          Playbook: {props.playbook && props.playbook.Name}
         </h5>
         {props.playbook ? (
           <>

@@ -14,14 +14,14 @@ function IndexPage(props) {
         size="md"
         bgImage=""
         bgImageOpacity={1}
-        title="Your landing page title here"
-        subtitle="This landing page is perfect for showing off your awesome product and driving people to sign up for a paid plan."
-        image="https://uploads.divjoy.com/undraw-japan_ubgk.svg"
+        title="Know how much load your APIs can handle."
+        subtitle="Moggies measures and tracks your APIs latency and throughput from different locations. Our insights give you predictabiliy how much customers your service can serve. "
+        image="/images/illustrations/undraw_data_reports_706v.svg"
         buttonText="Get Started"
         buttonColor="primary"
         buttonPath="/pricing"
       />
-      <ClientsSection
+      {/* <ClientsSection
         bg="light"
         textColor="dark"
         size="sm"
@@ -29,7 +29,7 @@ function IndexPage(props) {
         bgImageOpacity={1}
         title=""
         subtitle=""
-      />
+      /> */}
       <FeaturesSection
         bg="white"
         textColor="dark"

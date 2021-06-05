@@ -30,31 +30,38 @@ function NavbarCustom(props) {
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           <Nav>
             {auth.user && (
-              <NavDropdown id="dropdown" title="Account" alignRight={true}>
+              <>
+                <Link href="/playbooks/all" passHref={true}>
+                  <NavDropdown.Item active={false}>Playbooks</NavDropdown.Item>
+                </Link>
+                <Link href="/tests/all" passHref={true}>
+                  <NavDropdown.Item active={false}>Tests</NavDropdown.Item>
+                </Link>
                 <Link href="/dashboard" passHref={true}>
                   <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>
                 </Link>
+                <NavDropdown id="dropdown" title="Account" alignRight={true}>
+                  <Link href="/settings/general" passHref={true}>
+                    <NavDropdown.Item active={false}>Settings</NavDropdown.Item>
+                  </Link>
 
-                <Link href="/settings/general" passHref={true}>
-                  <NavDropdown.Item active={false}>Settings</NavDropdown.Item>
-                </Link>
+                  <Dropdown.Divider />
 
-                <Dropdown.Divider />
-
-                <Link href="/auth/signout" passHref={true}>
-                  <NavDropdown.Item
-                    active={false}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      auth
-                        .signout()
-                        .then(() => router.push(props.signoutRoute));
-                    }}
-                  >
-                    Sign out
-                  </NavDropdown.Item>
-                </Link>
-              </NavDropdown>
+                  <Link href="/auth/signout" passHref={true}>
+                    <NavDropdown.Item
+                      active={false}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        auth
+                          .signout()
+                          .then(() => router.push(props.signoutRoute));
+                      }}
+                    >
+                      Sign out
+                    </NavDropdown.Item>
+                  </Link>
+                </NavDropdown>
+              </>
             )}
 
             {!auth.user && (
