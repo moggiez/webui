@@ -10,12 +10,14 @@ function LoadtestResults(props) {
   const [responseTimeData, setResponseTimeData] = useState([]);
   const [showChart, setShowChart] = useState(false);
   const [refreshEnabled, setRefreshEnabled] = useState(true);
+  const [dataSource, setDataSource] = useState("N/A");
 
   const handleRefresh = () => {
     setRefreshEnabled(false);
     loadMetricsData(props.id)
-      .then((data) => {
+      .then(({ data, source }) => {
         setResponseTimeData(data);
+        setDataSource(source);
         setRefreshEnabled(true);
       })
       .catch((err) => console.log(err));
@@ -29,13 +31,14 @@ function LoadtestResults(props) {
           .then((metricsDataResponse) => {
             try {
               const metricsData = metricsDataResponse.data.MetricDataResults;
+              const metricsDataSource = metricsDataResponse.data.Source;
               const r = metricsData[0];
               const arr = [["x", `Loadtest: ${loadtestId}`]];
               for (var i = 0; i < r.Values.length; i++) {
                 arr.push([r.Timestamps[i], r.Values[i]]);
               }
 
-              return resolve(arr);
+              return resolve({ data: arr, source: metricsDataSource });
             } catch (err) {
               return reject(err);
             }
@@ -50,8 +53,9 @@ function LoadtestResults(props) {
   useEffect(() => {
     if (props.id) {
       loadMetricsData(props.id)
-        .then((data) => {
+        .then(({ data, source }) => {
           setResponseTimeData(data);
+          setDataSource(source);
           setShowChart(true);
         })
         .catch((err) => console.log(err));
@@ -62,6 +66,9 @@ function LoadtestResults(props) {
   if (showChart) {
     component = (
       <>
+        <Row>
+          <Col>Source: {dataSource} </Col>
+        </Row>
         <Row>
           {refreshEnabled ? (
             <Button variant="primary" onClick={handleRefresh} className="mt-3">
