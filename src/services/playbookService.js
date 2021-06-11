@@ -37,7 +37,7 @@ const getPlaybooks = (organisationId, currentUser) => {
 const getPlaybook = (playbookId, currentUser) => {
   return new Promise((resolve, reject) => {
     userSvc
-      .getUserData(currentUser)
+      .getUserData()
       .then(({ userData, session }) => {
         const url = `${playbookApiUrl}/${userData.OrganisationId}/${playbookId}`;
         const config = {

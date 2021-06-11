@@ -9,7 +9,7 @@ const triggerLoadTest = (currentUser, playbook) => {
   return new Promise((resolve, reject) => {
     if (currentUser) {
       userSvc
-        .getUserData(currentUser)
+        .getUserData()
         .then(({ userData, session }) => {
           const orgId = userData.OrganisationId;
           const config = {

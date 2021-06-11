@@ -5,15 +5,18 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Link from "next/link";
 
 import loadtestSvc from "../../services/loadtestService";
+import userSvc from "../../services/userService";
 
 function LoadtestList(props) {
   const [data, setData] = useState(null);
+  const loadAllLoadtests = async () => {
+    const { userData, session } = await userSvc.getUserData();
+    return await loadtestSvc.getAll(userData.OrganisationId);
+  };
 
   useEffect(() => {
-    loadtestSvc
-      .getAll("default")
+    loadAllLoadtests()
       .then((data) => {
-        console.log("getAll", data);
         setData(data.data.data);
       })
       .catch((err) => console.log("getAll err", err));

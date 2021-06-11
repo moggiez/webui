@@ -12,7 +12,6 @@ import {
 import { useUser, createUser, updateUser } from "./db";
 import router from "next/router";
 import PageLoader from "./../components/PageLoader";
-import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
 
 // Whether to merge extra user data from database into auth.user

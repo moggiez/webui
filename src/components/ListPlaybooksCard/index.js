@@ -7,7 +7,8 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import playbookService from "../../services/playbookService";
+import playbookSvc from "../../services/playbookService";
+import userSvc from "../../services/userService";
 import { useAuth } from "../../util/auth";
 
 function ListPlaybooksCard(props) {
@@ -17,11 +18,18 @@ function ListPlaybooksCard(props) {
   const [error, setError] = useState(null);
   const [customerPlaybooks, setCustomerPlaybooks] = useState(null);
 
+  const loadCustomerPlaybooks = async () => {
+    const { userData, session } = await userSvc.getUserData();
+    return await playbookSvc.getPlaybooks(
+      userData.OrganisationId,
+      auth.getCurrentUser()
+    );
+  };
+
   useEffect(() => {
     let mounted = true;
     setIsLoading(true);
-    playbookService
-      .getPlaybooks("default", auth.getCurrentUser())
+    loadCustomerPlaybooks()
       .then((playbooksArray) => {
         setCustomerPlaybooks(playbooksArray);
         setIsLoading(false);

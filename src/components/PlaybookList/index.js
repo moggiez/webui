@@ -5,15 +5,18 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Link from "next/link";
 
 import playbookSvc from "../../services/playbookService";
+import userSvc from "../../services/userService";
 
 function PlaybookList(props) {
   const [data, setData] = useState(null);
+  const loadAllPlaybooks = async () => {
+    const { userData, session } = await userSvc.getUserData();
+    return await playbookSvc.getAll(userData.OrganisationId);
+  };
 
   useEffect(() => {
-    playbookSvc
-      .getAll("default")
+    loadAllPlaybooks()
       .then((data) => {
-        console.log("getAll", data);
         setData(data.data.data);
       })
       .catch((err) => console.log("getAll err", err));

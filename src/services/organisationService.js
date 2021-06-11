@@ -4,7 +4,7 @@ const organisationApiURL = `${config.baseApiUrl}/organisation`;
 const getOrganisation = (currentUser) => {
   return new Promise((resolve, reject) => {
     userSvc
-      .getUserData(currentUser)
+      .getUserData()
       .then(({ userData, session }) => {
         const url = `${organisationApiURL}/${userData.OrganisationId}`;
         const config = {
