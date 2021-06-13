@@ -1,3 +1,7 @@
+# WebUI
+
+Website of moggies.io
+
 # Building
 
 ```bash
