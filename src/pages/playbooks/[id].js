@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Section from "components/Section";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import LoadtestResults from "../../components/LoadtestResults";
 import PlaybookList from "../../components/PlaybookList";
 
@@ -18,15 +20,18 @@ function LoadtestPage(props) {
       bgImage=""
       bgImageOpacity={1}
     >
-      <Container
-        className="mt-5"
-        style={{
-          maxWidth: "950px",
-          overflow: "scroll",
-        }}
-      >
-        {router.query.id != "all" && <LoadtestResults id={router.query.id} />}
-        {router.query.id == "all" && <PlaybookList />}
+      <Container>
+        <Row>
+          <h1>Playbooks</h1>
+        </Row>
+        <Row>
+          <Col lg>
+            {router.query.id != "all" && (
+              <LoadtestResults id={router.query.id} />
+            )}
+            {router.query.id == "all" && <PlaybookList />}
+          </Col>
+        </Row>
       </Container>
     </Section>
   );
