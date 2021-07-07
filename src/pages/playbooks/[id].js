@@ -3,7 +3,7 @@ import Section from "components/Section";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import LoadtestResults from "../../components/LoadtestResults";
+import Playbook from "../../components/Playbook";
 import PlaybookList from "../../components/PlaybookList";
 
 import { useRouter } from "next/router";
@@ -26,9 +26,7 @@ function LoadtestPage(props) {
         </Row>
         <Row>
           <Col lg>
-            {router.query.id != "all" && (
-              <LoadtestResults id={router.query.id} />
-            )}
+            {router.query.id != "all" && <Playbook id={router.query.id} />}
             {router.query.id == "all" && <PlaybookList />}
           </Col>
         </Row>

@@ -2,6 +2,7 @@ import axios from "axios";
 import config from "../config";
 import HttpClient from "./httpClient";
 import { UserPool } from "../services/cognitoAuth";
+import userSvc from "../services/userService";
 
 const http = new HttpClient();
 const loadtestApiURL = `${config.baseApiUrl}/loadtest`;
@@ -44,4 +45,11 @@ const getAll = async (org) => {
   return await http.get(`${loadtestApiURL}/${org}`);
 };
 
-export default { create, getAll };
+const remove = async (loadtestId) => {
+  const { userData, session } = await userSvc.getUserData();
+  return await http.delete(
+    `${loadtestApiURL}/${userData.OrganisationId}/${loadtestId}`
+  );
+};
+
+export default { create, getAll, remove };

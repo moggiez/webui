@@ -27,6 +27,13 @@ class HttpClient {
     }
     return this.instance.get(url);
   }
+
+  async delete(url) {
+    if (this.instance == null) {
+      await this.initialize();
+    }
+    return this.instance.delete(url);
+  }
 }
 
 export default HttpClient;

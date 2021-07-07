@@ -22,6 +22,13 @@ function LoadtestList(props) {
       .catch((err) => console.log("getAll err", err));
   }, []);
 
+  const handleDelete = async (id) => {
+    const result = await loadtestSvc.remove(id);
+    if (result.status == 200) {
+      setData(data.filter((x) => x.LoadtestId != id));
+    }
+  };
+
   let component = <div>Loading...</div>;
   if (data) {
     component = (
@@ -37,8 +44,14 @@ function LoadtestList(props) {
                 <Col>{item.LoadtestId}</Col>
                 <Col>
                   <Link href={`/tests/${item.LoadtestId}`}>
-                    <a>Go to results</a>
+                    <a>Open</a>
                   </Link>
+                  <a
+                    href="#"
+                    onClick={async () => await handleDelete(item.LoadtestId)}
+                  >
+                    Delete
+                  </a>
                 </Col>
               </Row>
             </ListGroup.Item>

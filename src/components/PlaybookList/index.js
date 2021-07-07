@@ -37,7 +37,7 @@ function PlaybookList(props) {
                 <Col>{item.Name}</Col>
                 <Col>
                   <Link href={`/playbooks/${item.PlaybookId}`}>
-                    <a>Go to loadtests</a>
+                    <a>Open</a>
                   </Link>
                 </Col>
               </Row>

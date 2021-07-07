@@ -60,8 +60,16 @@ const getAll = async (org) => {
   return await http.get(`${playbookApiUrl}/${org}`);
 };
 
+const getById = async (playbookId) => {
+  const { userData, session } = await userSvc.getUserData();
+  return await http.get(
+    `${playbookApiUrl}/${userData.OrganisationId}/${playbookId}`
+  );
+};
+
 export default {
   getPlaybooks: getPlaybooks,
   getPlaybook: getPlaybook,
   getAll: getAll,
+  getById,
 };
