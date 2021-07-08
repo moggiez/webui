@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Section from "components/Section";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,7 +9,7 @@ import PlaybookList from "../../components/PlaybookList";
 import { useRouter } from "next/router";
 import { requireAuth } from "util/auth.js";
 
-function LoadtestPage(props) {
+function PlaybooksPage(props) {
   const router = useRouter();
 
   return (
@@ -35,4 +35,4 @@ function LoadtestPage(props) {
   );
 }
 
-export default requireAuth(LoadtestPage);
+export default requireAuth(PlaybooksPage);

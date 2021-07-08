@@ -31,15 +31,16 @@ function NavbarCustom(props) {
           <Nav>
             {auth.user && (
               <>
-                <Link href="/playbooks/all" passHref={true}>
-                  <NavDropdown.Item active={false}>Playbooks</NavDropdown.Item>
-                </Link>
-                <Link href="/tests/all" passHref={true}>
-                  <NavDropdown.Item active={false}>Tests</NavDropdown.Item>
-                </Link>
-                <Link href="/dashboard" passHref={true}>
-                  <NavDropdown.Item active={false}>Dashboard</NavDropdown.Item>
-                </Link>
+                <Nav.Link href="/playbooks/all" passHref={true}>
+                  Playbooks
+                </Nav.Link>
+                <Nav.Link href="/tests/all" passHref={true}>
+                  Tests
+                </Nav.Link>
+                <Nav.Link href="/dashboard" passHref={true}>
+                  Dashboard
+                </Nav.Link>
+
                 <NavDropdown id="dropdown" title="Account" alignRight={true}>
                   <Link href="/settings/general" passHref={true}>
                     <NavDropdown.Item active={false}>Settings</NavDropdown.Item>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import Link from "next/link";
@@ -43,15 +44,13 @@ function LoadtestList(props) {
               <Row>
                 <Col>{item.LoadtestId}</Col>
                 <Col>
-                  <Link href={`/tests/${item.LoadtestId}`}>
-                    <a>Open</a>
-                  </Link>
-                  <a
-                    href="#"
+                  <Button href={`/tests/${item.LoadtestId}`}>Open</Button>
+                  <Button
+                    variant="danger"
                     onClick={async () => await handleDelete(item.LoadtestId)}
                   >
                     Delete
-                  </a>
+                  </Button>
                 </Col>
               </Row>
             </ListGroup.Item>
