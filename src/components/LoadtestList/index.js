@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-import ListGroup from "react-bootstrap/ListGroup";
-import Link from "next/link";
+import Container from "react-bootstrap/Container";
 
 import loadtestSvc from "../../services/loadtestService";
 import userSvc from "../../services/userService";
@@ -33,30 +32,29 @@ function LoadtestList(props) {
   let component = <div>Loading...</div>;
   if (data) {
     component = (
-      <>
-        <ListGroup
-          style={{
-            overflow: "scroll",
-          }}
-        >
-          {data.map((item, index) => (
-            <ListGroup.Item key={item.LoadtestId}>
-              <Row>
-                <Col>{item.LoadtestId}</Col>
-                <Col>
-                  <Button href={`/tests/${item.LoadtestId}`}>Open</Button>
-                  <Button
-                    variant="danger"
-                    onClick={async () => await handleDelete(item.LoadtestId)}
-                  >
-                    Delete
-                  </Button>
-                </Col>
-              </Row>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </>
+      <Container
+        style={{
+          overflow: "scroll",
+        }}
+      >
+        <Row>
+          <h1>Load tests</h1>
+        </Row>
+        {data.map((item, index) => (
+          <Row key={item.LoadtestId}>
+            <Col>{item.LoadtestId}</Col>
+            <Col>
+              <Button href={`/tests/${item.LoadtestId}`}>Open</Button>
+              <Button
+                variant="danger"
+                onClick={async () => await handleDelete(item.LoadtestId)}
+              >
+                Delete
+              </Button>
+            </Col>
+          </Row>
+        ))}
+      </Container>
     );
   }
 

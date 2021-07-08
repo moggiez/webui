@@ -9,14 +9,18 @@ function PageLoader(props) {
   return (
     <Section
       bg="white"
-      className="d-flex justify-content-center align-items-center"
+      className="page-loader d-flex justify-content-center align-items-center"
       style={{
         height: "400px",
         ...style,
       }}
       {...otherProps}
     >
-      <Container>{props.children && <>{props.children}</>}</Container>
+      <Container>
+        {!props.children && <Spinner animation="border" variant="primary" />}
+
+        {props.children && <>{props.children}</>}
+      </Container>
     </Section>
   );
 }

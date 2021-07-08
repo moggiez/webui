@@ -20,19 +20,8 @@ function LoadtestPage(props) {
       bgImage=""
       bgImageOpacity={1}
     >
-      <Container>
-        <Row>
-          <h1>Load tests</h1>
-        </Row>
-        <Row>
-          <Col lg>
-            {router.query.id != "all" && (
-              <LoadtestResults id={router.query.id} />
-            )}
-            {router.query.id == "all" && <LoadtestList />}
-          </Col>
-        </Row>
-      </Container>
+      {router.query.id != "all" && <LoadtestResults id={router.query.id} />}
+      {router.query.id == "all" && <LoadtestList />}
     </Section>
   );
 }

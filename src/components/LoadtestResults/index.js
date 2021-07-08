@@ -3,6 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Chart from "react-google-charts";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 import metricsSvc from "../../services/metricsService";
 
@@ -65,7 +66,7 @@ function LoadtestResults(props) {
   let component = <div>Loading...</div>;
   if (showChart) {
     component = (
-      <>
+      <Container>
         <Row>
           <Col>Source: {dataSource} </Col>
         </Row>
@@ -100,7 +101,7 @@ function LoadtestResults(props) {
             />
           </Col>
         </Row>
-      </>
+      </Container>
     );
   }
 

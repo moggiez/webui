@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ListGroup from "react-bootstrap/ListGroup";
+import Container from "react-bootstrap/Container";
 import Link from "next/link";
 
 import playbookSvc from "../../services/playbookService";
@@ -25,26 +25,25 @@ function PlaybookList(props) {
   let component = <div>Loading...</div>;
   if (data) {
     component = (
-      <>
-        <ListGroup
-          style={{
-            overflow: "scroll",
-          }}
-        >
-          {data.map((item, index) => (
-            <ListGroup.Item key={item.PlaybookId}>
-              <Row>
-                <Col>{item.Name}</Col>
-                <Col>
-                  <Link href={`/playbooks/${item.PlaybookId}`}>
-                    <a>Open</a>
-                  </Link>
-                </Col>
-              </Row>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </>
+      <Container
+        style={{
+          overflow: "scroll",
+        }}
+      >
+        <Row>
+          <h1>Playbooks</h1>
+        </Row>
+        {data.map((item, index) => (
+          <Row key={item.PlaybookId}>
+            <Col>{item.Name}</Col>
+            <Col>
+              <Link href={`/playbooks/${item.PlaybookId}`}>
+                <a>Open</a>
+              </Link>
+            </Col>
+          </Row>
+        ))}
+      </Container>
     );
   }
 

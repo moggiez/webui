@@ -20,17 +20,8 @@ function PlaybooksPage(props) {
       bgImage=""
       bgImageOpacity={1}
     >
-      <Container>
-        <Row>
-          <h1>Playbooks</h1>
-        </Row>
-        <Row>
-          <Col lg>
-            {router.query.id != "all" && <Playbook id={router.query.id} />}
-            {router.query.id == "all" && <PlaybookList />}
-          </Col>
-        </Row>
-      </Container>
+      {router.query.id != "all" && <Playbook id={router.query.id} />}
+      {router.query.id == "all" && <PlaybookList />}
     </Section>
   );
 }

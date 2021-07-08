@@ -9,7 +9,7 @@ import {
   forgotPassword,
   changePassword,
 } from "../services/cognitoAuth";
-import { useUser, createUser, updateUser } from "./db";
+import { updateUser } from "./db";
 import router from "next/router";
 import PageLoader from "./../components/PageLoader";
 import analytics from "./analytics";
@@ -191,12 +191,14 @@ export const requireAuth = (Component) => {
 
     // Show loading indicator
     // We're either loading (user is null) or we're about to redirect (user is false)
+    let result = <></>;
     if (!auth.user) {
-      return <PageLoader />;
+      result = <PageLoader />;
     }
 
     // Render component now that we have user
-    return <Component {...props} />;
+    result = <Component {...props} />;
+    return result;
   };
 };
 
