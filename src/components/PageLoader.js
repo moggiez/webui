@@ -16,11 +16,7 @@ function PageLoader(props) {
       }}
       {...otherProps}
     >
-      <Container>
-        {!props.children && <Spinner animation="border" variant="primary" />}
-
-        {props.children && <>{props.children}</>}
-      </Container>
+      <Container>{props.children && <>{props.children}</>}</Container>
     </Section>
   );
 }
