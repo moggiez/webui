@@ -19,7 +19,7 @@ function SettingsOrganisation(props) {
 
   const [organisation, setOrganisation] = useState({
     name: "Moggies",
-    owner: auth.user.getUsername(),
+    owner: auth.user ? auth.user.getUsername() : "",
   });
 
   const { register, handleSubmit, errors } = useForm();
@@ -110,7 +110,7 @@ function SettingsOrganisation(props) {
             type="text"
             label="Organisation Owner"
             defaultValue={
-              organisation.Owner == auth.user.getUsername()
+              auth.user && organisation.Owner == auth.user.getUsername()
                 ? "you"
                 : organisation.Owner
             }
@@ -146,38 +146,40 @@ function SettingsOrganisation(props) {
           )}
         </Button>
       </Form>
-      {organisation && organisation.Owner == auth.user.getUsername() && (
-        <Form onSubmit={handleSubmit(onInviteSubmit)}>
-          {formAlert && (
-            <FormAlert type={formAlert.type} message={formAlert.message} />
-          )}
-          <Form.Row className="mt-3">
-            <Col>
-              <Form.Label>Invite new member:</Form.Label>
-            </Col>
-          </Form.Row>
-          <Form.Row>
-            <Col column="xl">
-              <FormField
-                name="inviteEmail"
-                type="email"
-                defaultValue={""}
-                placeholder="email"
-                error={errors.inviteEmail}
-                size="lg"
-                inputRef={register({
-                  required: "Please enter the email of the invitee",
-                })}
-              />
-            </Col>
-            <Col>
-              <Button type="submit" size="lg" className="mb-0">
-                Invite
-              </Button>
-            </Col>
-          </Form.Row>
-        </Form>
-      )}
+      {organisation &&
+        auth.user &&
+        organisation.Owner == auth.user.getUsername() && (
+          <Form onSubmit={handleSubmit(onInviteSubmit)}>
+            {formAlert && (
+              <FormAlert type={formAlert.type} message={formAlert.message} />
+            )}
+            <Form.Row className="mt-3">
+              <Col>
+                <Form.Label>Invite new member:</Form.Label>
+              </Col>
+            </Form.Row>
+            <Form.Row>
+              <Col column="xl">
+                <FormField
+                  name="inviteEmail"
+                  type="email"
+                  defaultValue={""}
+                  placeholder="email"
+                  error={errors.inviteEmail}
+                  size="lg"
+                  inputRef={register({
+                    required: "Please enter the email of the invitee",
+                  })}
+                />
+              </Col>
+              <Col>
+                <Button type="submit" size="lg" className="mb-0">
+                  Invite
+                </Button>
+              </Col>
+            </Form.Row>
+          </Form>
+        )}
     </>
   );
 }

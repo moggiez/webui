@@ -63,7 +63,7 @@ function SettingsGeneral(props) {
           name="name"
           type="text"
           label="Name"
-          defaultValue={auth.user.getUsername()}
+          defaultValue={auth.user ? auth.user.getUsername() : ""}
           disabled
           placeholder="Name"
           error={errors.name}

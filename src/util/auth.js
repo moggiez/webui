@@ -188,17 +188,7 @@ export const requireAuth = (Component) => {
         router.replace("/auth/signin");
       }
     }, [auth]);
-
-    // Show loading indicator
-    // We're either loading (user is null) or we're about to redirect (user is false)
-    let result = <></>;
-    if (!auth.user) {
-      result = <PageLoader />;
-    }
-
-    // Render component now that we have user
-    result = <Component {...props} />;
-    return result;
+    return <Component {...props} />;
   };
 };
 
