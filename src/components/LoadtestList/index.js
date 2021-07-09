@@ -29,18 +29,22 @@ function LoadtestList(props) {
     }
   };
 
-  let component = <div>Loading...</div>;
-  if (data) {
-    component = (
-      <Container
-        style={{
-          overflow: "scroll",
-        }}
-      >
+  return (
+    <Container
+      style={{
+        overflow: "scroll",
+      }}
+    >
+      <Row>
+        <h1>Load tests</h1>
+      </Row>
+      {!data && (
         <Row>
-          <h1>Load tests</h1>
+          <Col>Loading...</Col>
         </Row>
-        {data.map((item, index) => (
+      )}
+      {data &&
+        data.map((item, index) => (
           <Row key={item.LoadtestId}>
             <Col>{item.LoadtestId}</Col>
             <Col>
@@ -54,11 +58,8 @@ function LoadtestList(props) {
             </Col>
           </Row>
         ))}
-      </Container>
-    );
-  }
-
-  return component;
+    </Container>
+  );
 }
 
 export default LoadtestList;

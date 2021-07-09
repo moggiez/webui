@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import playbookSvc from "../../services/playbookService";
 
@@ -18,11 +20,22 @@ function Playbook(props) {
 
   return (
     <Container>
-      <Card>
-        <Card.Body>
-          <h5 className="mb-3">Name: {playbook && playbook.Name}</h5>
-        </Card.Body>
-      </Card>
+      {!playbook && (
+        <Row>
+          <Col>Loading...</Col>
+        </Row>
+      )}
+      {playbook && (
+        <Row>
+          <Col>
+            <Card>
+              <Card.Body>
+                <h5 className="mb-3">Name: {playbook.Name}</h5>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 }

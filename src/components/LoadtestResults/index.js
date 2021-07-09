@@ -63,49 +63,51 @@ function LoadtestResults(props) {
     }
   }, [props.id]);
 
-  let component = <div>Loading...</div>;
-  if (showChart) {
-    component = (
-      <Container>
-        <Row>
-          <Col>Source: {dataSource} </Col>
-        </Row>
-        <Row>
-          {refreshEnabled ? (
-            <Button variant="primary" onClick={handleRefresh} className="mt-3">
-              Refresh
-            </Button>
-          ) : (
-            <Button disabled variant="secondary" className="mt-3">
-              Refreshing...
-            </Button>
-          )}
-        </Row>
-        <Row>
-          <Col>
-            <Chart
-              width={"800px"}
-              height={"400px"}
-              chartType="LineChart"
-              loader={<div>Loading Chart</div>}
-              data={responseTimeData}
-              options={{
-                hAxis: {
-                  title: "Date and time",
-                },
-                vAxis: {
-                  title: "Response time (ms)",
-                },
-              }}
-              rootProps={{ "data-testid": "1" }}
-            />
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
-  return component;
+  return (
+    <Container>
+      <Row>
+        <Col>Source: {dataSource} </Col>
+      </Row>
+      <Row>
+        {!showChart && <div>Loading...</div>}
+        {refreshEnabled
+          ? showChart && (
+              <Button
+                variant="primary"
+                onClick={handleRefresh}
+                className="mt-3"
+              >
+                Refresh
+              </Button>
+            )
+          : showChart && (
+              <Button disabled variant="secondary" className="mt-3">
+                Refreshing...
+              </Button>
+            )}
+      </Row>
+      <Row>
+        <Col>
+          <Chart
+            width={"800px"}
+            height={"400px"}
+            chartType="LineChart"
+            loader={<div>Loading Chart</div>}
+            data={responseTimeData}
+            options={{
+              hAxis: {
+                title: "Date and time",
+              },
+              vAxis: {
+                title: "Response time (ms)",
+              },
+            }}
+            rootProps={{ "data-testid": "1" }}
+          />
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
 export default LoadtestResults;

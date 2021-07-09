@@ -22,18 +22,22 @@ function PlaybookList(props) {
       .catch((err) => console.log("getAll err", err));
   }, []);
 
-  let component = <div>Loading...</div>;
-  if (data) {
-    component = (
-      <Container
-        style={{
-          overflow: "scroll",
-        }}
-      >
+  return (
+    <Container
+      style={{
+        overflow: "scroll",
+      }}
+    >
+      <Row>
+        <h1>Playbooks</h1>
+      </Row>
+      {!data && (
         <Row>
-          <h1>Playbooks</h1>
+          <Col>Loading...</Col>
         </Row>
-        {data.map((item, index) => (
+      )}
+      {data &&
+        data.map((item, index) => (
           <Row key={item.PlaybookId}>
             <Col>{item.Name}</Col>
             <Col>
@@ -43,11 +47,8 @@ function PlaybookList(props) {
             </Col>
           </Row>
         ))}
-      </Container>
-    );
-  }
-
-  return component;
+    </Container>
+  );
 }
 
 export default PlaybookList;
