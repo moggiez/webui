@@ -22,7 +22,7 @@ function Playbook(props) {
     <Container>
       {!playbook && (
         <Row>
-          <Col>Loading...</Col>
+          <Col>Loading playbook...</Col>
         </Row>
       )}
       {playbook && (

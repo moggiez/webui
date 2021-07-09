@@ -11,7 +11,6 @@ import {
 } from "../services/cognitoAuth";
 import { updateUser } from "./db";
 import router from "next/router";
-import PageLoader from "./../components/PageLoader";
 import analytics from "./analytics";
 
 // Whether to merge extra user data from database into auth.user

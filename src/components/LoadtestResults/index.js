@@ -69,7 +69,7 @@ function LoadtestResults(props) {
         <Col>Source: {dataSource} </Col>
       </Row>
       <Row>
-        {!showChart && <div>Loading...</div>}
+        {!showChart && <div>Loading results...</div>}
         {refreshEnabled
           ? showChart && (
               <Button

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Link from "next/link";
 
@@ -9,8 +10,16 @@ import userSvc from "../../services/userService";
 
 function PlaybookList(props) {
   const [data, setData] = useState(null);
+  const [selectedPlaybook, setSelectedPlaybook] = useState(null);
+
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+
+  const [showRun, setShowRun] = useState(false);
+  const handleCloseRun = () => setShowRun(false);
+
   const loadAllPlaybooks = async () => {
-    const { userData, session } = await userSvc.getUserData();
+    const { userData, _ } = await userSvc.getUserData();
     return await playbookSvc.getAll(userData.OrganisationId);
   };
 
@@ -22,31 +31,123 @@ function PlaybookList(props) {
       .catch((err) => console.log("getAll err", err));
   }, []);
 
+  const selectPlaybook = (playbookId) => {
+    const playbooks = data.filter((item) => item.PlaybookId == playbookId);
+    const playbook = playbooks && playbooks.length > 0 ? playbooks[0] : null;
+    setSelectedPlaybook(playbook);
+
+    return playbook != null && playbook != undefined;
+  };
+
+  const handleDeleteClick = (playbookId) => {
+    if (selectPlaybook(playbookId)) {
+      setShowDelete(true);
+    }
+  };
+
+  const handleRunClick = (playbookId) => {
+    if (selectPlaybook(playbookId)) {
+      setShowRun(true);
+    }
+  };
+
   return (
     <Container
       style={{
         overflow: "scroll",
       }}
     >
-      <Row>
+      <div>
         <h1>Playbooks</h1>
-      </Row>
-      {!data && (
-        <Row>
-          <Col>Loading...</Col>
-        </Row>
-      )}
-      {data &&
-        data.map((item, index) => (
-          <Row key={item.PlaybookId}>
-            <Col>{item.Name}</Col>
-            <Col>
-              <Link href={`/playbooks/${item.PlaybookId}`}>
-                <a>Open</a>
-              </Link>
-            </Col>
-          </Row>
-        ))}
+      </div>
+      <Table responsive="sm" hover striped>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {!data && (
+            <tr>
+              <td colspan={2}>
+                <div class="d-flex justify-content-center">Loading data...</div>
+              </td>
+            </tr>
+          )}
+          {data &&
+            data.map((item, _) => (
+              <tr key={item.PlaybookId}>
+                <td>{item.Name}</td>
+                <td>
+                  <Button
+                    variant="link"
+                    className="ml-1 p-0 border-0 align-baseline"
+                    onClick={() => handleRunClick(item.PlaybookId)}
+                  >
+                    Run
+                  </Button>
+                  <Link href={`/playbooks/${item.PlaybookId}`}>
+                    <a className="ml-1">Edit</a>
+                  </Link>
+                  <Button
+                    variant="link"
+                    className="ml-1 p-0 border-0 align-baseline"
+                    onClick={() => handleDeleteClick(item.PlaybookId)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+
+      <Modal
+        show={showDelete}
+        onHide={handleCloseDelete}
+        backdrop="static"
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete playbook</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you want to delete playbook{" "}
+          <strong>{selectedPlaybook && selectedPlaybook.Name}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDelete}>
+            Close
+          </Button>
+          <Button variant="danger">Delete</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showRun}
+        onHide={handleCloseRun}
+        backdrop="static"
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Run playbook</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you want to run playbook{" "}
+          <strong>{selectedPlaybook && selectedPlaybook.Name}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseRun}>
+            Close
+          </Button>
+          <Button variant="primary">Run</Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }
