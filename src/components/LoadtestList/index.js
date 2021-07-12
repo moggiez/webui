@@ -62,9 +62,9 @@ function LoadtestList(props) {
         <thead>
           <tr>
             <th>Id</th>
+            <th>Playbook</th>
             <th>Date start</th>
             <th>Date end</th>
-            <th>Playbook</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -80,13 +80,11 @@ function LoadtestList(props) {
             data.map((item, _) => (
               <tr key={item.LoadtestId}>
                 <td>{item.LoadtestId}</td>
-                <td>N/A</td>
-                <td>N/A</td>
                 <td>
-                  <Link href={`/tests/${item.LoadtestId}`}>
-                    <a className="ml-1">View</a>
-                  </Link>
+                  <Link href="/tests/all#">Call google: 1</Link>
                 </td>
+                <td>2020-07-09 10:13:31</td>
+                <td>2020-07-09 10:13:55</td>
                 <td>
                   <Link href={`/tests/${item.LoadtestId}`}>
                     <a>Results</a>

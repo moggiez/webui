@@ -66,27 +66,6 @@ function LoadtestResults(props) {
   return (
     <Container>
       <Row>
-        <Col>Source: {dataSource} </Col>
-      </Row>
-      <Row>
-        {!showChart && <div>Loading results...</div>}
-        {refreshEnabled
-          ? showChart && (
-              <Button
-                variant="primary"
-                onClick={handleRefresh}
-                className="mt-3"
-              >
-                Refresh
-              </Button>
-            )
-          : showChart && (
-              <Button disabled variant="secondary" className="mt-3">
-                Refreshing...
-              </Button>
-            )}
-      </Row>
-      <Row>
         <Col>
           <Chart
             width={"800px"}

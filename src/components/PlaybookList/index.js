@@ -3,6 +3,8 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Link from "next/link";
 
 import playbookSvc from "../../services/playbookService";
@@ -58,19 +60,29 @@ function PlaybookList(props) {
       }}
     >
       <div>
-        <h1>Playbooks</h1>
+        <Row>
+          <Col>
+            <h1>Playbooks</h1>
+          </Col>
+          <Col>
+            <div className="align-bottom">
+              <Button>Add new</Button>
+            </div>
+          </Col>
+        </Row>
       </div>
       <Table responsive="sm" hover striped>
         <thead>
           <tr>
             <th>Name</th>
+            <th>Last run</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {!data && (
             <tr>
-              <td colspan={2}>
+              <td colspan={3}>
                 <div class="d-flex justify-content-center">Loading data...</div>
               </td>
             </tr>
@@ -79,6 +91,11 @@ function PlaybookList(props) {
             data.map((item, _) => (
               <tr key={item.PlaybookId}>
                 <td>{item.Name}</td>
+                <td>
+                  <Link href={`/playbooks/${item.PlaybookId}`}>
+                    <a className="ml-1">2021-07-09</a>
+                  </Link>
+                </td>
                 <td>
                   <Button
                     variant="link"
