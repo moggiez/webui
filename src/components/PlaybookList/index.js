@@ -28,7 +28,7 @@ function PlaybookList(props) {
   useEffect(() => {
     loadAllPlaybooks()
       .then((data) => {
-        setData(data.data.data);
+        setData(data.data);
       })
       .catch((err) => console.log("getAll err", err));
   }, []);
@@ -84,6 +84,13 @@ function PlaybookList(props) {
             <tr>
               <td colspan={3}>
                 <div class="d-flex justify-content-center">Loading data...</div>
+              </td>
+            </tr>
+          )}
+          {data && data.length == 0 && (
+            <tr>
+              <td colspan={3}>
+                <div class="d-flex justify-content-center">No playbooks.</div>
               </td>
             </tr>
           )}

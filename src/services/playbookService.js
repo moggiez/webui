@@ -5,7 +5,7 @@ import HttpClient from "./httpClient";
 
 const http = new HttpClient();
 
-const playbookApiUrl = `${config.baseApiUrl}/playbook`;
+const playbookApiUrl = `https://playbooks-api.moggies.io`;
 
 const getPlaybooks = (organisationId, currentUser) => {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ const getPlaybooks = (organisationId, currentUser) => {
         if (err) {
           reject(err);
         } else {
-          const url = `${playbookApiUrl}/${organisationId}`;
+          const url = `${playbookApiUrl}/${organisationId}/playbooks`;
           const config = {
             headers: {
               Authorization: session.getIdToken().getJwtToken(),
@@ -23,7 +23,7 @@ const getPlaybooks = (organisationId, currentUser) => {
           axios
             .get(url, config)
             .then((response) => {
-              resolve(response.data.data);
+              resolve(response.data);
             })
             .catch((error) => reject(error));
         }
@@ -39,7 +39,7 @@ const getPlaybook = (playbookId, currentUser) => {
     userSvc
       .getUserData()
       .then(({ userData, session }) => {
-        const url = `${playbookApiUrl}/${userData.OrganisationId}/${playbookId}`;
+        const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
         const config = {
           headers: {
             Authorization: session.getIdToken().getJwtToken(),
@@ -57,13 +57,13 @@ const getPlaybook = (playbookId, currentUser) => {
 };
 
 const getAll = async (org) => {
-  return await http.get(`${playbookApiUrl}/${org}`);
+  return await http.get(`${playbookApiUrl}/${org}/playbooks`);
 };
 
 const getById = async (playbookId) => {
   const { userData, session } = await userSvc.getUserData();
   return await http.get(
-    `${playbookApiUrl}/${userData.OrganisationId}/${playbookId}`
+    `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`
   );
 };
 
