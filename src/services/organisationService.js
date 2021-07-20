@@ -1,5 +1,4 @@
-import config from "../config";
-const organisationApiURL = `${config.baseApiUrl}/organisation`;
+const organisationApiURL = `https://organisations-api.moggies.io`;
 
 const getOrganisation = (currentUser) => {
   return new Promise((resolve, reject) => {
