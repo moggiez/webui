@@ -2,7 +2,7 @@ import { getUserAttributes } from "../services/cognitoAuth";
 import config from "../config";
 import axios from "axios";
 
-const userApiURL = `${config.baseApiUrl}/user`;
+const userApiURL = `https://users-api.moggies.io`;
 
 const getUserData = async () => {
   try {
