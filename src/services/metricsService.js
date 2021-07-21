@@ -1,7 +1,6 @@
-import config from "../config";
 import HttpClient from "./httpClient";
 
-const metricsApiURL = `${config.baseApiUrl}/metrics`;
+const metricsApiURL = `https://metrics-api.moggies.io`;
 const http = new HttpClient();
 
 const getMetricsData = async (loadtestId) => {

@@ -5,7 +5,7 @@ import { UserPool } from "../services/cognitoAuth";
 import userSvc from "../services/userService";
 
 const http = new HttpClient();
-const loadtestApiURL = `${config.baseApiUrl}/loadtest`;
+const loadtestApiURL = `https://loadtests-api.moggies.io`;
 
 const create = (organisationId, playbookId) => {
   const proceedAfterUserSessionObtained = (session, resolve, reject) => {
