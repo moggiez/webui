@@ -133,3 +133,8 @@ node_modules
 out/
 infrastructure/.terraform
 data.db
+.terraform/
+.next-tf/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
