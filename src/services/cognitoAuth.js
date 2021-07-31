@@ -14,7 +14,6 @@ if (process.env.NEXT_PUBLIC_DOMAIN) {
   domain = process.env.NEXT_PUBLIC_DOMAIN;
 }
 console.log("domain is", domain);
-console.log("hostname is ", window.location.hostname);
 console.log("process.env is", process.env);
 const storage = new CookieStorage({
   domain: domain,
