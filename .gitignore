@@ -102,7 +102,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+#.env
 .venv
 env/
 venv/
@@ -138,3 +138,4 @@ data.db
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
+terraform.tfstate.d/

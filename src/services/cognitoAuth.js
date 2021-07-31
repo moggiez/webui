@@ -13,6 +13,7 @@ let domain = ".moggies.io";
 if (process.env.NEXT_PUBLIC_DOMAIN) {
   domain = process.env.NEXT_PUBLIC_DOMAIN;
 }
+
 const storage = new CookieStorage({
   domain: domain,
 });

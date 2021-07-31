@@ -10,9 +10,11 @@ make build-static
 
 # Deploy
 
-```bash
-make deploy
-```
+Deployed with AWS Amplify on push to master.
+
+## PRs
+
+PR previews are available with AWS Amplify - when you create a PR it will be deployed to a custom url where you can visualize and test your changes.
 
 ## 👉 Get Started
 
