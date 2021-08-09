@@ -12,9 +12,8 @@ import ListPlaybooksCard from "../components/ListPlaybooksCard";
 
 import Alert from "react-bootstrap/Alert";
 
-import runSvc from "../services/runService";
+import driverSvc from "../services/driverService";
 import playbookSvc from "../services/playbookService";
-import metricsSvc from "../services/metricsService";
 
 function DashboardPage(props) {
   const auth = useAuth();
@@ -31,7 +30,7 @@ function DashboardPage(props) {
       playbookSvc
         .getPlaybook(playbook.PlaybookId)
         .then(({ playbook, session }) => {
-          runSvc
+          driverSvc
             .triggerLoadTest(auth.getCurrentUser(), playbook)
             .then(({ loadtestId, response }) => {
               setRunState({
