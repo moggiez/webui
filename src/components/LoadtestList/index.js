@@ -63,7 +63,7 @@ function LoadtestList(props) {
           <tr>
             <th>Id</th>
             <th>Playbook</th>
-            <th>Date start</th>
+            <th>Created</th>
             <th>Date end</th>
             <th>Actions</th>
           </tr>
@@ -77,28 +77,30 @@ function LoadtestList(props) {
             </tr>
           )}
           {data &&
-            data.map((item, _) => (
-              <tr key={item.LoadtestId}>
-                <td>{item.LoadtestId}</td>
-                <td>
-                  <Link href="/tests/all#">Call google: 1</Link>
-                </td>
-                <td>2020-07-09 10:13:31</td>
-                <td>2020-07-09 10:13:55</td>
-                <td>
-                  <Link href={`/tests/${item.LoadtestId}`}>
-                    <a>Results</a>
-                  </Link>
-                  <Button
-                    variant="link"
-                    className="ml-1 p-0 border-0 align-baseline"
-                    onClick={() => handleDeleteClick(item.LoadtestId)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            data
+              .sort((a, b) => new Date(a.CreatedAt) < new Date(b.CreatedAt))
+              .map((item, _) => (
+                <tr key={item.LoadtestId}>
+                  <td>{item.LoadtestId}</td>
+                  <td>
+                    <Link href="/tests/all#">Call google: 1</Link>
+                  </td>
+                  <td>{item.CreatedAt}</td>
+                  <td>2020-07-09 10:13:55</td>
+                  <td>
+                    <Link href={`/tests/${item.LoadtestId}`}>
+                      <a>Results</a>
+                    </Link>
+                    <Button
+                      variant="link"
+                      className="ml-1 p-0 border-0 align-baseline"
+                      onClick={() => handleDeleteClick(item.LoadtestId)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </Table>
 

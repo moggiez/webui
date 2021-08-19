@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import metricsSvc from "../../services/metricsService";
 
 function LoadtestResults(props) {
-  const [responseTimeData, setResponseTimeData] = useState([]);
+  const [responseTimeData, setResponseTimeData] = useState(null);
   const [showChart, setShowChart] = useState(false);
   const [refreshEnabled, setRefreshEnabled] = useState(true);
   const [dataSource, setDataSource] = useState("N/A");
@@ -65,26 +65,29 @@ function LoadtestResults(props) {
 
   return (
     <Container>
-      <Row>
-        <Col>
-          <Chart
-            width={"800px"}
-            height={"400px"}
-            chartType="LineChart"
-            loader={<div>Loading Chart</div>}
-            data={responseTimeData}
-            options={{
-              hAxis: {
-                title: "Date and time",
-              },
-              vAxis: {
-                title: "Response time (ms)",
-              },
-            }}
-            rootProps={{ "data-testid": "1" }}
-          />
-        </Col>
-      </Row>
+      {!responseTimeData && <div>Loading data...</div>}
+      {responseTimeData && (
+        <Row>
+          <Col>
+            <Chart
+              width={"800px"}
+              height={"400px"}
+              chartType="LineChart"
+              loader={<div>Loading chart...</div>}
+              data={responseTimeData}
+              options={{
+                hAxis: {
+                  title: "Date and time",
+                },
+                vAxis: {
+                  title: "Response time (ms)",
+                },
+              }}
+              rootProps={{ "data-testid": "1" }}
+            />
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 }
