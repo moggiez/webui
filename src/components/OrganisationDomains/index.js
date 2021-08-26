@@ -11,6 +11,7 @@ import { ListGroup } from "react-bootstrap";
 import FormAlert from "components/FormAlert";
 import Modal from "react-bootstrap/Modal";
 import isValidDomain from "is-valid-domain";
+import "./OrganisationDomains.module.scss";
 
 function OrganisationDomains(props) {
   const [showModal, setShowModal] = useState(false);
@@ -58,7 +59,6 @@ function OrganisationDomains(props) {
 
     return true;
   };
-
   return (
     <>
       {/* MEMBERS */}
@@ -93,8 +93,8 @@ function OrganisationDomains(props) {
             return (
               <ListGroup.Item key={d.DomainName}>
                 <Row>
-                  <Col>{d.DomainName}</Col>
-                  <Col>
+                  <Col className={"col-vcenter"}>{d.DomainName}</Col>
+                  <Col className={"col-vcenter"}>
                     <Button
                       variant="link"
                       onClick={() => onShowDomainSettings(d)}
@@ -102,7 +102,7 @@ function OrganisationDomains(props) {
                       Settings
                     </Button>
                   </Col>
-                  <Col>
+                  <Col className={"col-vcenter"}>
                     <Badge className={classes}>{d.ValidationState}</Badge>
                   </Col>
                 </Row>

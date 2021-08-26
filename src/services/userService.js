@@ -1,5 +1,4 @@
 import { getUserAttributes } from "../services/cognitoAuth";
-import config from "../config";
 import axios from "axios";
 
 const userApiURL = `https://users-api.moggies.io`;
