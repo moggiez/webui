@@ -1,4 +1,3 @@
-import config from "../config";
 import userSvc from "../services/userService";
 import axios from "axios";
 import HttpClient from "./httpClient";

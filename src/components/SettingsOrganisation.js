@@ -2,27 +2,73 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import FormField from "components/FormField";
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuth } from "util/auth.js";
 import { useForm } from "react-hook-form";
-import { ListGroup } from "react-bootstrap";
-import FormAlert from "components/FormAlert";
+import OrganisationMembers from "components/OrganisationMembers";
+import OrganisationDomains from "components/OrganisationDomains";
 
 import userService from "../services/userService";
-import { getUserAttributes, inviteUser } from "../services/cognitoAuth";
+import domainsSvc from "../services/domainsService";
+import { inviteUser } from "../services/cognitoAuth";
 
 function SettingsOrganisation(props) {
   const auth = useAuth();
   const [pending, setPending] = useState(false);
-  const [formAlert, setFormAlert] = useState(null);
 
   const [organisation, setOrganisation] = useState({
     name: "Moggies",
     owner: auth.user ? auth.user.getUsername() : "",
   });
 
+  const [domains, setDomains] = useState([]);
+  const [members, setMembers] = useState([
+    "stavrev.georgi@gmail.com",
+    "georgi@moggies.io",
+    "gabriela@moggies.io",
+  ]);
+
   const { register, handleSubmit, errors } = useForm();
+
+  const onDomainNameSubmit = async (data, setFormAlert) => {
+    const result = await domainsSvc.create(data.domainName);
+    if (result.success) {
+      setFormAlert({
+        type: "success",
+        message: `${data.domainName} was added and pending validation.`,
+      });
+    } else {
+      setFormAlert({ type: "error", message: result.error });
+    }
+    await loadDomains();
+    return result.success;
+  };
+
+  const onInviteSubmit = async (data, setFormAlert) => {
+    try {
+      await inviteUser(
+        data.inviteEmail,
+        organisation.Owner,
+        organisation.OrganisationId
+      );
+      setFormAlert({
+        type: "success",
+        message: `${data.inviteEmail} was invited to join you organisation.`,
+      });
+    } catch (err) {
+      setFormAlert({ type: "error", message: err.message });
+    }
+  };
+
+  const loadDomains = async () => {
+    try {
+      const domains = await domainsSvc.getAll();
+      setDomains(domains);
+    } catch (err) {
+      console.log("NO DOMAINS DATA ", err);
+    }
+  };
+
   const onSubmit = (data) => {
     // Show pending indicator
     setPending(true);
@@ -57,26 +103,6 @@ function SettingsOrganisation(props) {
       });
   };
 
-  const onInviteSubmit = (data) => {
-    inviteUser(
-      data.inviteEmail,
-      organisation.Owner,
-      organisation.OrganisationId
-    )
-      .then(() => {
-        setFormAlert({
-          type: "success",
-          message: `${data.inviteEmail} was invited to join you organisation.`,
-        });
-      })
-      .catch((err) => {
-        setFormAlert({
-          type: "error",
-          message: err.message,
-        });
-      });
-  };
-
   useEffect(() => {
     userService
       .getUserData()
@@ -84,6 +110,10 @@ function SettingsOrganisation(props) {
         setOrganisation(userData);
       })
       .catch((err) => console.log("NO USER DATA ", err));
+  }, []);
+
+  useEffect(async () => {
+    await loadDomains();
   }, []);
 
   return (
@@ -123,12 +153,6 @@ function SettingsOrganisation(props) {
             })}
           />
         </Form.Group>
-        <label>Members</label>
-        <ListGroup>
-          <ListGroup.Item>stavrev.georgi@gmail.com</ListGroup.Item>
-          <ListGroup.Item>georgi@moggies.io</ListGroup.Item>
-          <ListGroup.Item>gabriela@moggies.io</ListGroup.Item>
-        </ListGroup>
 
         <Button type="submit" size="lg" disabled={pending} className="mt-3">
           <span>Save</span>
@@ -146,40 +170,18 @@ function SettingsOrganisation(props) {
           )}
         </Button>
       </Form>
-      {organisation &&
-        auth.user &&
-        organisation.Owner == auth.user.getUsername() && (
-          <Form onSubmit={handleSubmit(onInviteSubmit)}>
-            {formAlert && (
-              <FormAlert type={formAlert.type} message={formAlert.message} />
-            )}
-            <Form.Row className="mt-3">
-              <Col>
-                <Form.Label>Invite new member:</Form.Label>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col column="xl">
-                <FormField
-                  name="inviteEmail"
-                  type="email"
-                  defaultValue={""}
-                  placeholder="email"
-                  error={errors.inviteEmail}
-                  size="lg"
-                  inputRef={register({
-                    required: "Please enter the email of the invitee",
-                  })}
-                />
-              </Col>
-              <Col>
-                <Button type="submit" size="lg" className="mb-0">
-                  Invite
-                </Button>
-              </Col>
-            </Form.Row>
-          </Form>
-        )}
+      <OrganisationDomains
+        organisation={organisation}
+        user={auth.user}
+        domains={domains}
+        onAddDoamin={onDomainNameSubmit}
+      />
+      <OrganisationMembers
+        organisation={organisation}
+        user={auth.user}
+        members={members}
+        onInvite={onInviteSubmit}
+      />
     </>
   );
 }

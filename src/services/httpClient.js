@@ -6,6 +6,18 @@ class HttpClient {
     this.instance = null;
   }
 
+  setBaseUrl(baseUrl) {
+    this.baseUrl = baseUrl;
+  }
+
+  _getFullUrl(url) {
+    if (this.baseUrl) {
+      return `${this.baseUrl}/${url}`;
+    } else {
+      return url;
+    }
+  }
+
   async initialize() {
     try {
       const resp = await getUserAttributes();
@@ -25,14 +37,21 @@ class HttpClient {
     if (this.instance == null) {
       await this.initialize();
     }
-    return this.instance.get(url);
+    return this.instance.get(this._getFullUrl(url));
   }
 
   async delete(url) {
     if (this.instance == null) {
       await this.initialize();
     }
-    return this.instance.delete(url);
+    return this.instance.delete(this._getFullUrl(url));
+  }
+
+  async post(url) {
+    if (this.instance == null) {
+      await this.initialize();
+    }
+    return this.instance.post(this._getFullUrl(url));
   }
 }
 

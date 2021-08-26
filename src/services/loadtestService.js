@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "../config";
 import HttpClient from "./httpClient";
 import { UserPool } from "../services/cognitoAuth";
 import userSvc from "../services/userService";
