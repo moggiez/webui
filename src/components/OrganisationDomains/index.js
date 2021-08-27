@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import FormField from "components/FormField";
 import Button from "react-bootstrap/Button";
@@ -9,25 +9,98 @@ import Spinner from "react-bootstrap/Spinner";
 import { useForm } from "react-hook-form";
 import { ListGroup } from "react-bootstrap";
 import FormAlert from "components/FormAlert";
-import Modal from "react-bootstrap/Modal";
+import Modal from "../Modal";
 import isValidDomain from "is-valid-domain";
+import { FaTrash } from "react-icons/fa";
 import "./OrganisationDomains.module.scss";
 
 function OrganisationDomains(props) {
-  const [showModal, setShowModal] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState(null);
+  const [modalSettings, setModalSettings] = useState({});
   const [formAlert, setFormAlert] = useState(null);
   const { register, handleSubmit, errors, setError, clearErrors, setValue } =
     useForm();
 
-  const onShowDomainSettings = (domain) => {
-    setSelectedDomain(domain);
-    setShowModal(true);
+  const triggerDelete = (domain) => {
+    props.onDelete(domain, setFormAlert);
+    closeModal();
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const onShowDelete = (domain) => {
+    setSelectedDomain(domain);
+
+    const modalButtons = (
+      <>
+        <Button variant="danger" onClick={() => triggerDelete(domain)}>
+          Delete
+        </Button>
+        <Button variant="secondary" onClick={closeModal}>
+          Close
+        </Button>
+      </>
+    );
+
+    setModalSettings({
+      show: true,
+      title: `Delete ${domain.DomainName}`,
+      content: <>Do you want to delete {domain.DomainName}?</>,
+      footer: modalButtons,
+      onClick: closeModal,
+    });
+  };
+
+  const onShowDomainSettings = (domain) => {
+    setSelectedDomain(domain);
+
+    const modalButtons = (
+      <>
+        <Button variant="secondary" onClick={closeModal}>
+          Close
+        </Button>
+      </>
+    );
+
+    const modalCont = (
+      <>
+        <h3>DNS Validation</h3>
+        <Row>
+          <Col>
+            <i>Add the following DNS record to validate the domain.</i>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={1} md={2} lg={2}>
+            <strong>Record type:</strong>
+          </Col>
+          <Col>CNAME</Col>
+        </Row>
+        <Row>
+          <Col xs={1} md={2} lg={2}>
+            <strong>Record name:</strong>
+          </Col>
+          <Col>{domain && domain.ValidationRecordName}</Col>
+        </Row>
+        <Row>
+          <Col xs={1} md={2} lg={2}>
+            <strong>Value</strong>
+          </Col>
+          <Col>{domain && domain.ValidationRecordValue}</Col>
+        </Row>
+      </>
+    );
+
+    setModalSettings({
+      show: true,
+      title: "Settings",
+      content: modalCont,
+      footer: modalButtons,
+      onClick: closeModal,
+    });
+  };
+
+  const closeModal = () => {
     setSelectedDomain(null);
+    setModalSettings({ show: false });
   };
 
   const validateDomainName = (data) => {
@@ -84,7 +157,7 @@ function OrganisationDomains(props) {
                 classes = "bg-warning";
                 break;
               case "INVALID":
-                classes = "bg-danger text-dark";
+                classes = "bg-danger";
                 break;
               default:
                 classes = "bg-info";
@@ -104,6 +177,15 @@ function OrganisationDomains(props) {
                   </Col>
                   <Col className={"col-vcenter"}>
                     <Badge className={classes}>{d.ValidationState}</Badge>
+                  </Col>
+                  <Col className={"col-vcenter"}>
+                    <Button
+                      variant="link"
+                      className={"del-button"}
+                      onClick={() => onShowDelete(d)}
+                    >
+                      <FaTrash />
+                    </Button>
                   </Col>
                 </Row>
               </ListGroup.Item>
@@ -154,50 +236,7 @@ function OrganisationDomains(props) {
             </Form.Row>
           </Form>
         )}
-      <Modal
-        show={showModal}
-        size="lg"
-        onHide={handleCloseModal}
-        backdrop="static"
-        keyboard={false}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header>
-          <Modal.Title>Settings</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h3>DNS Validation</h3>
-          <Row>
-            <Col>
-              <i>Add the following DNS record to validate the domain.</i>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={1} md={2} lg={2}>
-              <strong>Record type:</strong>
-            </Col>
-            <Col>CNAME</Col>
-          </Row>
-          <Row>
-            <Col xs={1} md={2} lg={2}>
-              <strong>Record name:</strong>
-            </Col>
-            <Col>{selectedDomain && selectedDomain.ValidationRecordName}</Col>
-          </Row>
-          <Row>
-            <Col xs={1} md={2} lg={2}>
-              <strong>Value</strong>
-            </Col>
-            <Col>{selectedDomain && selectedDomain.ValidationRecordValue}</Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Modal {...modalSettings} />
     </>
   );
 }

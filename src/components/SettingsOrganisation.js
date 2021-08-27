@@ -44,6 +44,29 @@ function SettingsOrganisation(props) {
     return result.success;
   };
 
+  const handleDeleteDomain = (domain, setFormAlert) => {
+    domainsSvc.remove(domain).then((d) => {
+      if (d.status === 200) {
+        const newDomains = domains.filter(
+          (value) =>
+            value.OrganisationId !== domain.OrganisationId &&
+            value.DomainName !== domain.DomainName
+        );
+        setFormAlert({
+          type: "success",
+          message: `${domain.DomainName} has been removed from your organisation.`,
+        });
+
+        setDomains(newDomains);
+      } else {
+        setFormAlert({
+          type: "error",
+          message: `${domain.DomainName} could not be removed.`,
+        });
+      }
+    });
+  };
+
   const onInviteSubmit = async (data, setFormAlert) => {
     try {
       await inviteUser(
@@ -53,7 +76,7 @@ function SettingsOrganisation(props) {
       );
       setFormAlert({
         type: "success",
-        message: `${data.inviteEmail} was invited to join you organisation.`,
+        message: `${data.inviteEmail} was invited to join your organisation.`,
       });
     } catch (err) {
       setFormAlert({ type: "error", message: err.message });
@@ -175,6 +198,7 @@ function SettingsOrganisation(props) {
         user={auth.user}
         domains={domains}
         onAddDoamin={onDomainNameSubmit}
+        onDelete={handleDeleteDomain}
       />
       <OrganisationMembers
         organisation={organisation}
