@@ -29,9 +29,11 @@ const create = async (domainName) => {
     : { success: false, error: response.text };
 };
 
-const remove = async (domainName) => {
+const remove = async (domain) => {
   const { userData, _ } = await userSvc.getUserData();
-  return await http.delete(`${userData.OrganisationId}/domains/${domainName}`);
+  return await http.delete(
+    `${domain.OrganisationId}/domains/${domain.DomainName}`
+  );
 };
 
 export default { create, getAll, remove };
