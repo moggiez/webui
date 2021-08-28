@@ -118,7 +118,6 @@ const makepass = (length) => {
 };
 
 const inviteUser = async (email, invitedBy, orgId) => {
-  console.log("inviteUser", email, invitedBy, orgId);
   return new Promise((resolve, reject) => {
     const attributeList = [];
     const dataEmail = {

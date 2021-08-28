@@ -1,28 +1,117 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
-import FormField from "components/FormField";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Badge from "react-bootstrap/Badge";
-import Spinner from "react-bootstrap/Spinner";
 import { useForm } from "react-hook-form";
-import { ListGroup } from "react-bootstrap";
+import FormField from "components/FormField";
+import {
+  Row,
+  Col,
+  Badge,
+  Alert,
+  Spinner,
+  Button,
+  Form,
+  ListGroup,
+} from "react-bootstrap";
 import FormAlert from "components/FormAlert";
 import Modal from "../Modal";
 import isValidDomain from "is-valid-domain";
 import { FaTrash } from "react-icons/fa";
 import "./OrganisationDomains.module.scss";
 
-function OrganisationDomains(props) {
+function AddDomainUnavailable() {
+  return (
+    <Alert variant="info">Only the organisation owner can add domains.</Alert>
+  );
+}
+
+function AddDomainForm({ formAlert, setFormAlert, onAddDoamin }) {
+  const { register, handleSubmit, errors, setError, clearErrors, setValue } =
+    useForm();
+  const validateDomainName = (data) => {
+    if (!isValidDomain(data.domainName)) {
+      setError(
+        "domainName",
+        {
+          type: "manual",
+          message: "Invalid domain name.",
+        },
+        { shouldFocus: true }
+      );
+      return false;
+    }
+
+    if (!isValidDomain(data.domainName, { subdomain: false })) {
+      setError(
+        "domainName",
+        {
+          type: "manual",
+          message: "Subdomains not allowed.",
+        },
+        { shouldFocus: true }
+      );
+      return false;
+    }
+
+    clearErrors("domainName");
+
+    return true;
+  };
+
+  return (
+    <Form
+      onSubmit={handleSubmit(async (data) => {
+        if (validateDomainName(data)) {
+          const result = await onAddDoamin(data, setFormAlert);
+          if (result) {
+            setValue("domainName", "", { shouldDirty: false });
+          }
+        }
+      })}
+    >
+      {formAlert && (
+        <FormAlert type={formAlert.type} message={formAlert.message} />
+      )}
+      <Form.Row className="mt-3">
+        <Col>
+          <Form.Label>Add new domain:</Form.Label>
+        </Col>
+      </Form.Row>
+      <Form.Row>
+        <Col column="xl">
+          <FormField
+            name="domainName"
+            type="text"
+            defaultValue={""}
+            placeholder="domain"
+            error={errors.domainName}
+            size="lg"
+            inputRef={register({
+              required: "Please enter the domain name.",
+            })}
+          />
+        </Col>
+        <Col>
+          <Button type="submit" size="lg" className="mb-0 mt-2">
+            Add domain
+          </Button>
+        </Col>
+      </Form.Row>
+    </Form>
+  );
+}
+
+function OrganisationDomains({
+  user,
+  domains,
+  organisation,
+  onDelete,
+  onAddDoamin,
+}) {
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [modalSettings, setModalSettings] = useState({});
   const [formAlert, setFormAlert] = useState(null);
-  const { register, handleSubmit, errors, setError, clearErrors, setValue } =
-    useForm();
 
   const triggerDelete = (domain) => {
-    props.onDelete(domain, setFormAlert);
+    onDelete(domain, setFormAlert);
     closeModal();
   };
 
@@ -102,41 +191,11 @@ function OrganisationDomains(props) {
     setSelectedDomain(null);
     setModalSettings({ show: false });
   };
-
-  const validateDomainName = (data) => {
-    if (!isValidDomain(data.domainName)) {
-      setError(
-        "domainName",
-        {
-          type: "manual",
-          message: "Invalid domain name.",
-        },
-        { shouldFocus: true }
-      );
-      return false;
-    }
-
-    if (!isValidDomain(data.domainName, { subdomain: false })) {
-      setError(
-        "domainName",
-        {
-          type: "manual",
-          message: "Subdomains not allowed.",
-        },
-        { shouldFocus: true }
-      );
-      return false;
-    }
-
-    clearErrors("domainName");
-
-    return true;
-  };
   return (
     <>
       {/* MEMBERS */}
       <h1 className={"mt-5"}>Domains</h1>
-      {!props.domains && (
+      {!domains && (
         <Spinner
           animation="border"
           size="sm"
@@ -145,9 +204,9 @@ function OrganisationDomains(props) {
           className="align-baseline"
         />
       )}
-      {props.domains && (
+      {domains && (
         <ListGroup>
-          {props.domains.map((d) => {
+          {domains.map((d) => {
             let classes = "bg-success";
             switch (d.ValidationState) {
               case "VALID":
@@ -193,49 +252,16 @@ function OrganisationDomains(props) {
           })}
         </ListGroup>
       )}
-      {props.organisation &&
-        props.user &&
-        props.organisation.Owner == props.user.getUsername() && (
-          <Form
-            onSubmit={handleSubmit(async (data) => {
-              if (validateDomainName(data)) {
-                const result = await props.onAddDoamin(data, setFormAlert);
-                if (result) {
-                  setValue("domainName", "", { shouldDirty: false });
-                }
-              }
-            })}
-          >
-            {formAlert && (
-              <FormAlert type={formAlert.type} message={formAlert.message} />
-            )}
-            <Form.Row className="mt-3">
-              <Col>
-                <Form.Label>Add new domain:</Form.Label>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col column="xl">
-                <FormField
-                  name="domainName"
-                  type="tetxt"
-                  defaultValue={""}
-                  placeholder="domain"
-                  error={errors.domainName}
-                  size="lg"
-                  inputRef={register({
-                    required: "Please enter the domain name.",
-                  })}
-                />
-              </Col>
-              <Col>
-                <Button type="submit" size="lg" className="mb-0 mt-2">
-                  Add domain
-                </Button>
-              </Col>
-            </Form.Row>
-          </Form>
-        )}
+      {(organisation && user && organisation.Owner === user.getUsername() && (
+        <AddDomainForm
+          formAlert={formAlert}
+          setFormAlert={setFormAlert}
+          onAddDoamin={onAddDoamin}
+        />
+      )) ||
+        (organisation && user && organisation.Owner !== user.getUsername() && (
+          <AddDomainUnavailable />
+        ))}
       <Modal {...modalSettings} />
     </>
   );

@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { useRouter } from "next/router";
+import {
+  Modal,
+  Button,
+  Table,
+  Container,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
+
 import Link from "next/link";
+import { FaRunning, FaEdit, FaTrash } from "react-icons/fa";
 
 import playbookSvc from "../../services/playbookService";
 import userSvc from "../../services/userService";
 
-function PlaybookList(props) {
+function PlaybookList() {
+  const router = useRouter();
   const [data, setData] = useState(null);
   const [selectedPlaybook, setSelectedPlaybook] = useState(null);
 
@@ -25,12 +33,17 @@ function PlaybookList(props) {
     return await playbookSvc.getAll(userData.OrganisationId);
   };
 
-  useEffect(() => {
-    loadAllPlaybooks()
-      .then((data) => {
-        setData(data.data);
-      })
-      .catch((err) => console.log("getAll err", err));
+  const loadPlaybooks = async () => {
+    try {
+      const data = await loadAllPlaybooks();
+      setData(data.data);
+    } catch (err) {
+      console.log("getAll err", err);
+    }
+  };
+
+  useEffect(async () => {
+    await loadPlaybooks();
   }, []);
 
   const selectPlaybook = (playbookId) => {
@@ -47,10 +60,26 @@ function PlaybookList(props) {
     }
   };
 
+  const handleDelete = async () => {
+    if (selectedPlaybook) {
+      const deleteResponse = await playbookSvc.delete(
+        selectedPlaybook.PlaybookId
+      );
+      setShowDelete(false);
+      if (deleteResponse.status === 200) {
+        await loadPlaybooks();
+      }
+    }
+  };
+
   const handleRunClick = (playbookId) => {
     if (selectPlaybook(playbookId)) {
       setShowRun(true);
     }
+  };
+
+  const handleAddNew = () => {
+    router.push("/playbooks/new:0");
   };
 
   return (
@@ -66,7 +95,7 @@ function PlaybookList(props) {
           </Col>
           <Col>
             <div className="align-bottom">
-              <Button>Add new</Button>
+              <Button onClick={handleAddNew}>Add new</Button>
             </div>
           </Col>
         </Row>
@@ -76,7 +105,6 @@ function PlaybookList(props) {
           <tr>
             <th>Name</th>
             <th>Version</th>
-            <th>Last run</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -84,14 +112,18 @@ function PlaybookList(props) {
           {!data && (
             <tr>
               <td colSpan={3}>
-                <div class="d-flex justify-content-center">Loading data...</div>
+                <div className="d-flex justify-content-center">
+                  Loading data...
+                </div>
               </td>
             </tr>
           )}
           {data && data.length == 0 && (
             <tr>
               <td colSpan={3}>
-                <div class="d-flex justify-content-center">No playbooks.</div>
+                <div className="d-flex justify-content-center">
+                  No playbooks.
+                </div>
               </td>
             </tr>
           )}
@@ -105,28 +137,55 @@ function PlaybookList(props) {
                   </Link>
                 </td>
                 <td>
-                  <Link href={`/playbooks/${item.PlaybookId}:${item.Latest}`}>
-                    <a className="ml-1">2021-07-09</a>
-                  </Link>
-                </td>
-                <td>
-                  <Button
-                    variant="link"
-                    className="ml-1 p-0 border-0 align-baseline"
-                    onClick={() => handleRunClick(item.PlaybookId)}
+                  <OverlayTrigger
+                    key="run"
+                    placement="left"
+                    overlay={<Tooltip id={"tooltip-run"}>Run playbook</Tooltip>}
                   >
-                    Run
-                  </Button>
-                  <Link href={`/playbooks/${item.PlaybookId}_${item.Latest}`}>
-                    <a className="ml-1">Edit</a>
-                  </Link>
-                  <Button
-                    variant="link"
-                    className="ml-1 p-0 border-0 align-baseline"
-                    onClick={() => handleDeleteClick(item.PlaybookId)}
+                    <Button
+                      variant="link"
+                      className="ml-1 p-0 border-0 align-baseline"
+                      onClick={() => handleRunClick(item.PlaybookId)}
+                    >
+                      <FaRunning />
+                    </Button>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    key="edit"
+                    placement="top"
+                    overlay={
+                      <Tooltip id={"tooltip-run"}>Edit playbook</Tooltip>
+                    }
                   >
-                    Delete
-                  </Button>
+                    <Button
+                      variant="link"
+                      className="ml-1 p-0 border-0 align-baseline"
+                      onClick={() =>
+                        router.push(
+                          `/playbooks/${item.PlaybookId}:${item.Latest}`
+                        )
+                      }
+                    >
+                      <FaEdit />
+                    </Button>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    key="remove"
+                    placement="right"
+                    overlay={
+                      <Tooltip id={"tooltip-run"}>Delete playbook</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant="link"
+                      className="ml-1 p-0 border-0 align-baseline"
+                      onClick={() => handleDeleteClick(item.PlaybookId)}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </OverlayTrigger>
                 </td>
               </tr>
             ))}
@@ -152,7 +211,9 @@ function PlaybookList(props) {
           <Button variant="secondary" onClick={handleCloseDelete}>
             Close
           </Button>
-          <Button variant="danger">Delete</Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
         </Modal.Footer>
       </Modal>
 

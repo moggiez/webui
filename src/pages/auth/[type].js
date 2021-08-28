@@ -18,7 +18,7 @@ function AuthPage(props) {
           /*["google", "facebook", "twitter"]*/
         }
       }
-      afterAuthPath={router.query.next || "/dashboard"}
+      afterAuthPath={router.query.next || "/run"}
       afterConfirmationPath={"/auth/signin"}
     />
   );

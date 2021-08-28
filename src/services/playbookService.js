@@ -33,26 +33,16 @@ const getPlaybooks = (organisationId, currentUser) => {
   });
 };
 
-const getPlaybook = (playbookId, currentUser) => {
-  return new Promise((resolve, reject) => {
-    userSvc
-      .getUserData()
-      .then(({ userData, session }) => {
-        const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
-        const config = {
-          headers: {
-            Authorization: session.getIdToken().getJwtToken(),
-          },
-        };
-        axios
-          .get(url, config)
-          .then((response) => {
-            resolve({ playbook: response.data, session });
-          })
-          .catch((error) => reject(error));
-      })
-      .catch((error) => reject(error));
-  });
+const getPlaybook = async (playbookId, currentUser) => {
+  const { userData, session } = await userSvc.getUserData();
+  const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
+  const config = {
+    headers: {
+      Authorization: session.getIdToken().getJwtToken(),
+    },
+  };
+  const response = await axios.get(url, config);
+  return { playbook: response.data, session };
 };
 
 const getAll = async (org) => {
@@ -68,9 +58,50 @@ const getById = async (playbookId, playbookVersion) => {
   return await http.get(url);
 };
 
+const create = async (data) => {
+  const { userData, session } = await userSvc.getUserData();
+  const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks`;
+  return await http.post(url, data);
+};
+
+const update = async (playbookId, data) => {
+  const { userData, session } = await userSvc.getUserData();
+  const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
+  return await http.put(url, data);
+};
+
+const remove = async (playbookId) => {
+  const { userData, session } = await userSvc.getUserData();
+  const url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
+  return await http.delete(url);
+};
+
+const EMPTY_PLAYBOOK = {
+  PlaybookName: "New playbook",
+  Latest: 0,
+  Steps: [
+    {
+      requestOptions: {
+        hostname: "",
+        port: 80,
+        path: "/",
+        protocol: "http",
+      },
+      users: 100,
+      wait: 0,
+      repeats: 5,
+      type: "http_get",
+    },
+  ],
+};
+
 export default {
   getPlaybooks: getPlaybooks,
   getPlaybook: getPlaybook,
   getAll: getAll,
   getById,
+  create,
+  update,
+  delete: remove,
+  getEmptyPlaybook: () => EMPTY_PLAYBOOK,
 };

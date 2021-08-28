@@ -1,91 +1,67 @@
-import React, { useState, useEffect } from "react";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import ListGroup from "react-bootstrap/ListGroup";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import React, { useState } from "react";
+import {
+  Card,
+  Button,
+  Spinner,
+  ListGroup,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import Link from "next/link";
 
-import playbookSvc from "../../services/playbookService";
-import userSvc from "../../services/userService";
-import { useAuth } from "../../util/auth";
-
-function ListPlaybooksCard(props) {
-  const auth = useAuth();
-  const [selectedPlaybookId, setSelectedPlaybookId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [customerPlaybooks, setCustomerPlaybooks] = useState(null);
-
-  const loadCustomerPlaybooks = async () => {
-    const { userData, session } = await userSvc.getUserData();
-    return await playbookSvc.getPlaybooks(
-      userData.OrganisationId,
-      auth.getCurrentUser()
-    );
-  };
-
-  useEffect(() => {
-    let mounted = true;
-    setIsLoading(true);
-    loadCustomerPlaybooks()
-      .then((playbooksArray) => {
-        setCustomerPlaybooks(playbooksArray);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setCustomerPlaybooks([]);
-        setError(error);
-        setIsLoading(false);
-      });
-    return () => (mounted = false);
-  }, []);
-
+function ListPlaybooksCard({
+  onCardSelected,
+  playbooks,
+  loading,
+  error,
+  selected,
+}) {
   return (
     <Card>
       <Card.Body>
-        <h5 className="mb-3">Available load test playbooks</h5>
-        {isLoading && !customerPlaybooks ? (
+        <h5 className="mb-3">Playbooks</h5>
+        {loading && !playbooks ? (
           <Spinner animation="border" variant="primary" role="status">
             <span className="sr-only">Loading...</span>
           </Spinner>
         ) : (
           <ListGroup>
-            {customerPlaybooks.map((playbook) => (
-              <ListGroup.Item key={playbook.PlaybookId}>
-                <Container>
-                  <Row>
-                    <Col lg={true}>
-                      <Link
-                        href={`/playbooks/${playbook.PlaybookId}:${playbook.Latest}`}
-                      >
-                        <a className="ml-1">
-                          {playbook.PlaybookName}:{playbook.Latest}
-                        </a>
-                      </Link>
-                    </Col>
-                    <Col>
-                      {selectedPlaybookId != playbook.PlaybookId ? (
-                        <Button
-                          onClick={() => {
-                            setSelectedPlaybookId(playbook.PlaybookId);
-                            props.onCardSelected(playbook);
-                          }}
+            {playbooks &&
+              playbooks.map((playbook) => (
+                <ListGroup.Item key={playbook.PlaybookId}>
+                  <Container>
+                    <Row>
+                      <Col lg={true}>
+                        <Link
+                          href={`/playbooks/${playbook.PlaybookId}:${playbook.Latest}`}
                         >
-                          Select
-                        </Button>
-                      ) : (
-                        <Button disabled variant="secondary">
-                          Selected
-                        </Button>
-                      )}
-                    </Col>
-                  </Row>
-                </Container>
-              </ListGroup.Item>
-            ))}
+                          <a className="ml-1">
+                            {playbook.PlaybookName}:{playbook.Latest}
+                          </a>
+                        </Link>
+                      </Col>
+                      <Col>
+                        {(selected &&
+                          selected.PlaybookId != playbook.PlaybookId) ||
+                        !selected ? (
+                          <Button
+                            onClick={() => {
+                              onCardSelected(playbook);
+                            }}
+                          >
+                            Select
+                          </Button>
+                        ) : (
+                          <Button disabled variant="secondary">
+                            Selected
+                          </Button>
+                        )}
+                      </Col>
+                    </Row>
+                  </Container>
+                </ListGroup.Item>
+              ))}
           </ListGroup>
         )}
       </Card.Body>

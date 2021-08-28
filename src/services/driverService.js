@@ -13,10 +13,11 @@ const triggerLoadTest = async (currentUser, playbook) => {
         headers: {
           Authorization: session.getIdToken().getJwtToken(),
         },
+        validateStatus: (status) => true,
       };
       const loadtestResponse = await loadtestSvc.create(
         orgId,
-        playbook.PlaybookId
+        `${playbook.PlaybookId}:${playbook.Latest}`
       );
 
       const loadtestId = loadtestResponse.data.LoadtestId;

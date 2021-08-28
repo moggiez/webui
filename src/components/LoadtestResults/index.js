@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Chart from "react-google-charts";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Link from "next/link";
 
 import metricsSvc from "../../services/metricsService";
+import loadtestSvc from "../../services/loadtestService";
 
-function LoadtestResults(props) {
+function LoadtestResults({ id }) {
   const [responseTimeData, setResponseTimeData] = useState(null);
   const [showChart, setShowChart] = useState(false);
   const [refreshEnabled, setRefreshEnabled] = useState(true);
   const [dataSource, setDataSource] = useState("N/A");
+  const [loadtest, setLoadtest] = useState(null);
 
   const handleRefresh = () => {
     setRefreshEnabled(false);
-    loadMetricsData(props.id)
+    loadMetricsData(id)
       .then(({ data, source }) => {
         setResponseTimeData(data);
         setDataSource(source);
@@ -51,17 +53,25 @@ function LoadtestResults(props) {
     });
   };
 
-  useEffect(() => {
-    if (props.id) {
-      loadMetricsData(props.id)
-        .then(({ data, source }) => {
-          setResponseTimeData(data);
-          setDataSource(source);
-          setShowChart(true);
-        })
-        .catch((err) => console.log(err));
+  useEffect(async () => {
+    if (id) {
+      try {
+        const { data, source } = await loadMetricsData(id);
+        setResponseTimeData(data);
+        setDataSource(source);
+        setShowChart(true);
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }, [props.id]);
+  }, [id]);
+
+  useEffect(async () => {
+    if (id) {
+      const loadtest = await loadtestSvc.get(id);
+      setLoadtest(loadtest);
+    }
+  }, [id]);
 
   return (
     <Container>
@@ -85,6 +95,28 @@ function LoadtestResults(props) {
               }}
               rootProps={{ "data-testid": "1" }}
             />
+          </Col>
+          <Col>
+            <Row>
+              <Col xs={2} md={2} lg={2}>
+                <strong>Playbook:</strong>
+              </Col>
+              <Col xs={10} md={10} lg={10}>
+                {!loadtest && <span>loading...</span>}
+                {loadtest && (
+                  <Link href={`/playbooks/${loadtest.PlaybookId}`}>link</Link>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={2} md={2} lg={2}>
+                <strong>Job Id:</strong>
+              </Col>
+              <Col xs={10} md={10} lg={10}>
+                {!loadtest && <span>loading...</span>}
+                {loadtest && <>{loadtest.JobId}</>}
+              </Col>
+            </Row>
           </Col>
         </Row>
       )}

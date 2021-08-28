@@ -28,17 +28,20 @@ function NavbarCustom(props) {
 
         <Navbar.Toggle aria-controls="navbar-nav" className="border-0" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-          <Nav>
+          <Nav activeKey="/run">
             {auth.user && (
               <>
+                <Nav.Link href="/run" passHref={true}>
+                  Run
+                </Nav.Link>
                 <Nav.Link href="/playbooks/all" passHref={true}>
                   Playbooks
                 </Nav.Link>
                 <Nav.Link href="/tests/all" passHref={true}>
                   Tests
                 </Nav.Link>
-                <Nav.Link href="/dashboard" passHref={true}>
-                  Dashboard
+                <Nav.Link href="/domains" passHref={true}>
+                  Domains
                 </Nav.Link>
 
                 <NavDropdown id="dropdown" title="Account" alignRight={true}>
@@ -68,7 +71,7 @@ function NavbarCustom(props) {
             {!auth.user && (
               <>
                 <Nav.Item>
-                  <Link href="/dashboard" passHref={true}>
+                  <Link href="/run" passHref={true}>
                     <Nav.Link active={false}>Dashboard</Nav.Link>
                   </Link>
                 </Nav.Item>

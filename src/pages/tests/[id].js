@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Section from "components/Section";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import LoadtestResults from "../../components/LoadtestResults";
 import LoadtestList from "../../components/LoadtestList";
 
 import { useRouter } from "next/router";
 import { requireAuth } from "util/auth.js";
 
-function LoadtestPage(props) {
+function LoadtestPage() {
   const router = useRouter();
 
   return (

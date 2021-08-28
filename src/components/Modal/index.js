@@ -1,9 +1,9 @@
 import { default as BootstrapModal } from "react-bootstrap/Modal";
-function Modal({ show, onClose, title, content, footer }) {
+function Modal({ show, size = "lg", onClose, title, content, footer }) {
   return (
     <BootstrapModal
       show={show}
-      size="lg"
+      size={size}
       onHide={onClose}
       backdrop="static"
       keyboard={false}

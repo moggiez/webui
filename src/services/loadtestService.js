@@ -6,6 +6,17 @@ import userSvc from "../services/userService";
 const http = new HttpClient();
 const loadtestApiURL = `https://loadtests-api.moggies.io`;
 
+const get = async (id) => {
+  const { userData, session } = await userSvc.getUserData();
+  const url = `${loadtestApiURL}/${userData.OrganisationId}/${id}`;
+  const response = await http.get(url);
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  return null;
+};
+
 const create = (organisationId, playbookId) => {
   const proceedAfterUserSessionObtained = (session, resolve, reject) => {
     const config = {
@@ -51,4 +62,4 @@ const remove = async (loadtestId) => {
   );
 };
 
-export default { create, getAll, remove };
+export default { get, create, getAll, remove };

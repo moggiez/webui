@@ -35,7 +35,7 @@ function SettingsOrganisation(props) {
     if (result.success) {
       setFormAlert({
         type: "success",
-        message: `${data.domainName} was added and pending validation.`,
+        message: `${data.domainName} was added and pending DNS validation. Click on 'Settings' to see information about DNS record you need to add.`,
       });
     } else {
       setFormAlert({ type: "error", message: result.error });

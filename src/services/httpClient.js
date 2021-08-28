@@ -47,11 +47,19 @@ class HttpClient {
     return this.instance.delete(this._getFullUrl(url));
   }
 
-  async post(url) {
+  async post(url, data) {
+    console.log(data);
     if (this.instance == null) {
       await this.initialize();
     }
-    return this.instance.post(this._getFullUrl(url));
+    return this.instance.post(this._getFullUrl(url), data);
+  }
+
+  async put(url, data) {
+    if (this.instance == null) {
+      await this.initialize();
+    }
+    return this.instance.put(this._getFullUrl(url), data);
   }
 }
 

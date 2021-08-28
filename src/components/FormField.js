@@ -2,7 +2,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 
 function FormField(props) {
-  const { error, type, inputRef, ...inputProps } = props;
+  const { children, error, type, inputRef, ...inputProps } = props;
 
   return (
     <>
