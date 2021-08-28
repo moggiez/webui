@@ -59,11 +59,13 @@ const getAll = async (org) => {
   return await http.get(`${playbookApiUrl}/${org}/playbooks`);
 };
 
-const getById = async (playbookId) => {
+const getById = async (playbookId, playbookVersion) => {
   const { userData, session } = await userSvc.getUserData();
-  return await http.get(
-    `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`
-  );
+  let url = `${playbookApiUrl}/${userData.OrganisationId}/playbooks/${playbookId}`;
+  if (playbookVersion) {
+    url = `${url}/versions/v${playbookVersion}`;
+  }
+  return await http.get(url);
 };
 
 export default {

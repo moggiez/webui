@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Section from "components/Section";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -11,6 +11,26 @@ import { requireAuth } from "util/auth.js";
 
 function PlaybooksPage(props) {
   const router = useRouter();
+  const [playbookParams, setPlaybookParams] = useState({
+    id: null,
+    version: null,
+  });
+
+  useEffect(() => {
+    let segments = [];
+    if (router.query && router.query.id) {
+      segments = router.query.id.split(":");
+    }
+
+    let playbookId = null;
+    let playbookVersion = null;
+    if (segments.length == 2) {
+      playbookId = segments[0];
+      playbookVersion = segments[1];
+    }
+    const newParams = { id: playbookId, version: playbookVersion };
+    setPlaybookParams(newParams);
+  }, [router.query.id]);
 
   return (
     <Section
@@ -21,7 +41,7 @@ function PlaybooksPage(props) {
       bgImageOpacity={1}
     >
       {router.query.id && router.query.id != "all" && (
-        <Playbook id={router.query.id} />
+        <Playbook id={playbookParams.id} version={playbookParams.version} />
       )}
       {router.query.id == "all" && <PlaybookList />}
     </Section>

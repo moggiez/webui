@@ -71,7 +71,7 @@ function LoadtestList(props) {
         <tbody>
           {!data && (
             <tr>
-              <td colspan={5}>
+              <td colSpan={5}>
                 <div class="d-flex justify-content-center">Loading data...</div>
               </td>
             </tr>

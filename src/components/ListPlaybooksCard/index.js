@@ -6,6 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Link from "next/link";
 
 import playbookSvc from "../../services/playbookService";
 import userSvc from "../../services/userService";
@@ -56,7 +57,15 @@ function ListPlaybooksCard(props) {
               <ListGroup.Item key={playbook.PlaybookId}>
                 <Container>
                   <Row>
-                    <Col lg={true}>{playbook.Name}</Col>
+                    <Col lg={true}>
+                      <Link
+                        href={`/playbooks/${playbook.PlaybookId}:${playbook.Latest}`}
+                      >
+                        <a className="ml-1">
+                          {playbook.PlaybookName}:{playbook.Latest}
+                        </a>
+                      </Link>
+                    </Col>
                     <Col>
                       {selectedPlaybookId != playbook.PlaybookId ? (
                         <Button

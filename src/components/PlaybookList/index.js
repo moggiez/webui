@@ -75,6 +75,7 @@ function PlaybookList(props) {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Version</th>
             <th>Last run</th>
             <th>Actions</th>
           </tr>
@@ -82,14 +83,14 @@ function PlaybookList(props) {
         <tbody>
           {!data && (
             <tr>
-              <td colspan={3}>
+              <td colSpan={3}>
                 <div class="d-flex justify-content-center">Loading data...</div>
               </td>
             </tr>
           )}
           {data && data.length == 0 && (
             <tr>
-              <td colspan={3}>
+              <td colSpan={3}>
                 <div class="d-flex justify-content-center">No playbooks.</div>
               </td>
             </tr>
@@ -97,9 +98,14 @@ function PlaybookList(props) {
           {data &&
             data.map((item, _) => (
               <tr key={item.PlaybookId}>
-                <td>{item.Name}</td>
+                <td>{item.PlaybookName}</td>
                 <td>
-                  <Link href={`/playbooks/${item.PlaybookId}`}>
+                  <Link href={`/playbooks/${item.PlaybookId}:${item.Latest}`}>
+                    <a className="ml-1">{item.Latest}</a>
+                  </Link>
+                </td>
+                <td>
+                  <Link href={`/playbooks/${item.PlaybookId}:${item.Latest}`}>
                     <a className="ml-1">2021-07-09</a>
                   </Link>
                 </td>
@@ -111,7 +117,7 @@ function PlaybookList(props) {
                   >
                     Run
                   </Button>
-                  <Link href={`/playbooks/${item.PlaybookId}`}>
+                  <Link href={`/playbooks/${item.PlaybookId}_${item.Latest}`}>
                     <a className="ml-1">Edit</a>
                   </Link>
                   <Button
@@ -140,7 +146,7 @@ function PlaybookList(props) {
         </Modal.Header>
         <Modal.Body>
           Do you want to delete playbook{" "}
-          <strong>{selectedPlaybook && selectedPlaybook.Name}</strong>?
+          <strong>{selectedPlaybook && selectedPlaybook.PlaybookName}</strong>?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseDelete}>
@@ -163,7 +169,7 @@ function PlaybookList(props) {
         </Modal.Header>
         <Modal.Body>
           Do you want to run playbook{" "}
-          <strong>{selectedPlaybook && selectedPlaybook.Name}</strong>?
+          <strong>{selectedPlaybook && selectedPlaybook.PlaybookName}</strong>?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRun}>

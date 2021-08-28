@@ -6,17 +6,17 @@ import Col from "react-bootstrap/Col";
 
 import playbookSvc from "../../services/playbookService";
 
-function Playbook(props) {
+function Playbook({ id, version }) {
   const [playbook, setPlaybook] = useState(null);
 
   useEffect(async () => {
     try {
-      const playbookData = await playbookSvc.getById(props.id);
+      const playbookData = await playbookSvc.getById(id, version);
       setPlaybook(playbookData.data);
     } catch (err) {
       console.log("playbookSvc.getById", err);
     }
-  }, []);
+  }, [id, version]);
 
   return (
     <Container>
@@ -30,7 +30,7 @@ function Playbook(props) {
           <Col>
             <Card>
               <Card.Body>
-                <h5 className="mb-3">Name: {playbook.Name}</h5>
+                <h5 className="mb-3">Name: {playbook.PlaybookName}</h5>
               </Card.Body>
             </Card>
           </Col>
