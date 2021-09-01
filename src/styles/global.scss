@@ -54,3 +54,12 @@ $grid-breakpoints: (
     flex-shrink: 0;
   }
 }
+
+// Theming React Bootstrap
+.btn {
+  border-radius: 2.2px !important;
+}
+
+.card {
+  border-radius: 2.2px !important;
+}

@@ -1,16 +1,23 @@
 import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  Dropdown,
+  Container,
+  Button,
+} from "react-bootstrap";
 import Link from "next/link";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Dropdown from "react-bootstrap/Dropdown";
 import { useAuth } from "util/auth.js";
 import { useRouter } from "next/router";
 
 function NavbarCustom(props) {
   const auth = useAuth();
   const router = useRouter();
+
+  const handleRun = () => {
+    router.push("/run");
+  };
 
   return (
     <Navbar bg={props.bg} variant={props.variant} expand={props.expand}>
@@ -28,12 +35,10 @@ function NavbarCustom(props) {
 
         <Navbar.Toggle aria-controls="navbar-nav" className="border-0" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-          <Nav activeKey="/run">
+          <Nav>
             {auth.user && (
               <>
-                <Nav.Link href="/run" passHref={true}>
-                  Run
-                </Nav.Link>
+                <Button onClick={handleRun}>Run</Button>
                 <Nav.Link href="/playbooks/all" passHref={true}>
                   Playbooks
                 </Nav.Link>

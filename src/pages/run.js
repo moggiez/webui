@@ -157,12 +157,17 @@ function RunPage(props) {
       <>
         <Row>
           <Col xs={"auto"} md={"auto"} lg={"auto"}>
-            <Button className="mb-0 mt-2" onClick={handleRunPlaybook}>
+            <Button
+              size="lg"
+              className="mb-0 mt-2 text-light"
+              variant="danger"
+              onClick={handleRunPlaybook}
+            >
               Run
             </Button>
           </Col>
           <Col>
-            <Button className="mb-0 mt-2" onClick={handleNewPlaybook}>
+            <Button size="lg" className="mb-0 mt-2" onClick={handleNewPlaybook}>
               Create playbook
             </Button>
           </Col>
@@ -170,7 +175,12 @@ function RunPage(props) {
       </>
     ) : (
       <Col>
-        <Button type="submit" size="lg" className="mb-0 mt-2">
+        <Button
+          type="submit"
+          size="lg"
+          className="mb-0 mt-2 text-light"
+          variant="danger"
+        >
           Create playbook &amp; Run
         </Button>
       </Col>
@@ -213,7 +223,7 @@ function RunPage(props) {
                     </Row>
                     <Row>
                       <Col className="col-vcenter">
-                        <Button onClick={handleNewPlaybook}>
+                        <Button size="lg" onClick={handleNewPlaybook}>
                           Create playbook
                         </Button>
                       </Col>

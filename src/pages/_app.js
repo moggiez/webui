@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
           bg="white"
           variant="light"
           expand="md"
-          logo="images/logo.svg"
+          logo="/images/logo.svg"
         />
 
         <Component {...pageProps} />
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
           bgImageOpacity={1}
           description="A short description of what you do here"
           copyright="© 2021 moggies.io"
-          logo="images/logo.svg"
+          logo="/images/logo.svg"
         />
       </>
     </AuthProvider>
