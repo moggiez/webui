@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
           bg="white"
           variant="light"
           expand="md"
-          logo="https://uploads.divjoy.com/logo.svg"
+          logo="images/logo.svg"
         />
 
         <Component {...pageProps} />
@@ -26,8 +26,8 @@ function MyApp({ Component, pageProps }) {
           bgImage=""
           bgImageOpacity={1}
           description="A short description of what you do here"
-          copyright="© 2020 Company"
-          logo="https://uploads.divjoy.com/logo.svg"
+          copyright="© 2021 moggies.io"
+          logo="images/logo.svg"
         />
       </>
     </AuthProvider>
