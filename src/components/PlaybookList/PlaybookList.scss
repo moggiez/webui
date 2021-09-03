@@ -1,0 +1,10 @@
+.col-vcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.col-align-right {
+  justify-content: end;
+}

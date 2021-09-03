@@ -38,7 +38,13 @@ function NavbarCustom(props) {
           <Nav>
             {auth.user && (
               <>
-                <Button onClick={handleRun}>Run</Button>
+                <Button
+                  onClick={handleRun}
+                  variant="danger"
+                  className="text-light"
+                >
+                  Run
+                </Button>
                 <Nav.Link href="/playbooks/all" passHref={true}>
                   Playbooks
                 </Nav.Link>

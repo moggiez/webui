@@ -13,6 +13,7 @@ function PlaybookEdit({
   onCreate,
   onUpdate,
   footer,
+  createButtonText = "Create playbook",
 }) {
   const [activeCopy, setActiveCopyInternal] = useState({ ...playbook });
   const [formAlert, setFormAlert] = useState(null);

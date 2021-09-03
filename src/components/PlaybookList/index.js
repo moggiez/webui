@@ -17,6 +17,8 @@ import { FaRunning, FaEdit, FaTrash } from "react-icons/fa";
 import playbookSvc from "../../services/playbookService";
 import userSvc from "../../services/userService";
 
+import "components/PlaybookList/PlaybookList.scss";
+
 function PlaybookList() {
   const router = useRouter();
   const [data, setData] = useState(null);
@@ -93,8 +95,8 @@ function PlaybookList() {
           <Col>
             <h1>Playbooks</h1>
           </Col>
-          <Col>
-            <div className="align-bottom">
+          <Col className="col-vcenter col-align-right">
+            <div className="align-bottom align-right">
               <Button onClick={handleAddNew}>Add new</Button>
             </div>
           </Col>
@@ -200,7 +202,7 @@ function PlaybookList() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Delete playbook</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -225,7 +227,7 @@ function PlaybookList() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Run playbook</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -236,7 +238,17 @@ function PlaybookList() {
           <Button variant="secondary" onClick={handleCloseRun}>
             Close
           </Button>
-          <Button variant="primary">Run</Button>
+          <Button
+            variant="danger"
+            className="text-light"
+            onClick={() =>
+              alert(
+                "Not implemented yet. Please run playbooks from moggies.io/run"
+              )
+            }
+          >
+            Run
+          </Button>
         </Modal.Footer>
       </Modal>
     </Container>
