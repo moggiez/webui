@@ -135,6 +135,13 @@ function RunPage(props) {
   useEffect(async () => {
     const userLocal = await loadUser();
     const domains = await domainsSvc.getAll(userLocal.OrganisationId);
+
+    // TODO Added moggies.io so people can test. Remove in the future
+    if (domains.length == 0) {
+      domains.push({
+        DomainName: "moggies.io",
+      });
+    }
     setDomains(domains);
   }, []);
 

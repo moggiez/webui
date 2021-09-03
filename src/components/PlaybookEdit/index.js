@@ -100,6 +100,10 @@ function PlaybookEdit({
             New domains can be added by the organisation owner from the{" "}
             <a href="/domains">Domains page</a>
           </Alert>
+          <Alert variant={"info"}>
+            For testing purposes <strong>moggies.io</strong> can be used if you
+            can't add a domain at this time.
+          </Alert>
         </Col>
       </Row>
       <Form onSubmit={handleSubmit(onSubmitForm)}>
