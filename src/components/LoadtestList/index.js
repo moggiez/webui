@@ -95,7 +95,7 @@ function LoadtestList(props) {
                     </Link>
                     <Button
                       variant="link"
-                      className="ml-1 p-0 border-0 align-baseline"
+                      className="ml-1 p-0 border-0 align-baseline text-light"
                       onClick={() => handleDeleteClick(item.LoadtestId)}
                     >
                       Delete
@@ -125,7 +125,11 @@ function LoadtestList(props) {
           <Button variant="secondary" onClick={handleCloseDelete}>
             Close
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
+          <Button
+            variant="danger"
+            className="text-light"
+            onClick={handleDelete}
+          >
             Delete
           </Button>
         </Modal.Footer>

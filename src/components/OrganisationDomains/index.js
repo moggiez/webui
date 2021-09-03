@@ -120,7 +120,11 @@ function OrganisationDomains({
 
     const modalButtons = (
       <>
-        <Button variant="danger" onClick={() => triggerDelete(domain)}>
+        <Button
+          variant="danger"
+          className="text-light"
+          onClick={() => triggerDelete(domain)}
+        >
           Delete
         </Button>
         <Button variant="secondary" onClick={closeModal}>

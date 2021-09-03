@@ -213,7 +213,11 @@ function PlaybookList() {
           <Button variant="secondary" onClick={handleCloseDelete}>
             Close
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
+          <Button
+            variant="danger"
+            className="text-light"
+            onClick={handleDelete}
+          >
             Delete
           </Button>
         </Modal.Footer>

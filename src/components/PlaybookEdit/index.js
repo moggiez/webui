@@ -65,7 +65,7 @@ function PlaybookEdit({
   };
 
   const onSubmitForm = (data) => {
-    const hostname = `${subdomain}.${domain}`;
+    const hostname = `${subdomain || "www"}.${domain}`;
     const payload = {
       PlaybookName: data.playbookName,
       Steps: [

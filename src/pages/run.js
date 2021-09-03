@@ -206,9 +206,11 @@ function RunPage(props) {
           <Alert variant={runState.type}>{runState.message}</Alert>
         )}
         {lastLoadtestId && (
-          <Link href={`/tests/${lastLoadtestId}`}>
-            <a>Go to loadtest results.</a>
-          </Link>
+          <Alert variant={runState.type}>
+            <Link href={`/tests/${lastLoadtestId}`}>
+              <a>Go to loadtest results.</a>
+            </Link>
+          </Alert>
         )}
         <Row>
           <Col lg={6}>
