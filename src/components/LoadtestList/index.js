@@ -95,7 +95,7 @@ function LoadtestList(props) {
                     </Link>
                     <Button
                       variant="link"
-                      className="ml-1 p-0 border-0 align-baseline text-light"
+                      className="ml-1 p-0 border-0 align-baseline"
                       onClick={() => handleDeleteClick(item.LoadtestId)}
                     >
                       Delete
