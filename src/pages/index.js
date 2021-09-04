@@ -14,9 +14,10 @@ function IndexPage(props) {
         size="md"
         bgImage=""
         bgImageOpacity={1}
-        title="Know how much load your APIs can handle."
-        subtitle="Moggies measures and tracks your APIs latency and throughput from different locations. Our insights give you predictabiliy how much customers your service can serve. "
+        title="Loadtesting at scale with 0 lines of code."
+        subtitle="Built distributed load tests with thousands of virtual users with a few click. Visualize the results and keep track of all loadtests."
         image="/images/illustrations/undraw_data_reports_706v.svg"
+        video="/videos/demo_moggies.mp4"
         buttonText="Get Started"
         buttonColor="primary"
         buttonPath="/pricing"
@@ -30,7 +31,7 @@ function IndexPage(props) {
         title=""
         subtitle=""
       /> */}
-      <FeaturesSection
+      {/* <FeaturesSection
         bg="white"
         textColor="dark"
         size="md"
@@ -60,7 +61,7 @@ function IndexPage(props) {
         buttonColor="primary"
         inputPlaceholder="Enter your email"
         subscribedMessage="You are now subscribed!"
-      />
+      /> */}
     </>
   );
 }

@@ -171,9 +171,8 @@ function PlaybookEdit({
                     <FormField
                       name="subdomainName"
                       type="text"
-                      placeholder="Enter subdomain name"
+                      placeholder="www"
                       inputRef={register()}
-                      defaultValue={"www"}
                       value={subdomain === "" ? parsedSubDomain : subdomain}
                       onChange={(e) => {
                         setSubdomain(e.target.value);

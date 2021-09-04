@@ -2,10 +2,10 @@
 
 // COLORS
 $theme-colors: (
-  "primary": #0074d9,
+  "primary": #0ba8e6,
   "secondary": #6c757d,
   "success": #28a745,
-  "danger": #ff4136,
+  "danger": #ec5471,
   "warning": #ffc107,
   "info": #17a2b8,
   "light": #f8f9fa,
@@ -58,6 +58,7 @@ $grid-breakpoints: (
 // Theming React Bootstrap
 .btn {
   border-radius: 2.2px !important;
+  color: white;
 }
 
 .card {

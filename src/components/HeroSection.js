@@ -34,10 +34,15 @@ function HeroSection(props) {
               </Button>
             </Link>
           </Col>
-          <Col className="offset-lg-1 mt-5 mt-lg-0 ">
+          {/* <Col className="offset-lg-1 mt-5 mt-lg-0 ">
             <figure className="HeroSection__image-container mx-auto">
               <Image src={props.image} fluid={true} />
             </figure>
+          </Col> */}
+          <Col>
+            <video width="720" height="480" autoplay="" loop>
+              <source src={props.video} type="video/mp4" />
+            </video>
           </Col>
         </Row>
       </Container>
