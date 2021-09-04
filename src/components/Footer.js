@@ -24,28 +24,28 @@ function Footer(props) {
             </Link>
           </div>
           <div className="links right">
-            <Link href="/about">
+            {/* <Link href="/about">
               <a>About</a>
             </Link>
 
             <Link href="/faq">
               <a>FAQ</a>
-            </Link>
+            </Link> */}
 
             <Link href="/contact">
               <a>Contact</a>
             </Link>
 
-            <a
+            {/* <a
               target="_blank"
               href="https://medium.com"
               rel="noopener noreferrer"
             >
               Blog
-            </a>
+            </a> */}
           </div>
           <div className="social right">
-            <a
+            {/* <a
               href="https://twitter.com/divjoy"
               target="_blank"
               rel="noopener noreferrer"
@@ -71,7 +71,7 @@ function Footer(props) {
               <span className="icon">
                 <i className="fab fa-instagram" />
               </span>
-            </a>
+            </a> */}
           </div>
           <div className="copyright left">{props.copyright}</div>
         </div>
