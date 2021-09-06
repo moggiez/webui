@@ -268,7 +268,7 @@ function RunPage(props) {
         <Modal
           show={showModal}
           size={"sm"}
-          title={"Loading"}
+          title={"Creating load test, spawning virtual users ..."}
           content={<Spinner animation="border" variant="primary" />}
         />
       </Container>
