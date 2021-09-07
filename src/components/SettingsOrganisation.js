@@ -35,7 +35,7 @@ function SettingsOrganisation(props) {
     if (result.success) {
       setFormAlert({
         type: "success",
-        message: `${data.domainName} was added and pending DNS validation. Click on 'Settings' to see information about DNS record you need to add.`,
+        message: `${data.domainName} was added and pending DNS validation. Click on 'Settings' to see information about DNS record you need to add before validation expiration date is reached.`,
       });
     } else {
       setFormAlert({ type: "error", message: result.error });
@@ -126,19 +126,16 @@ function SettingsOrganisation(props) {
       });
   };
 
-  useEffect(() => {
-    userService
-      .getUserData()
-      .then(({ userData, session }) => {
-        setOrganisation(userData);
-      })
-      .catch((err) => console.log("NO USER DATA ", err));
-  }, []);
-
   useEffect(async () => {
+    try {
+      const { userData, session } = await userService.getUserData();
+      setOrganisation(userData);
+    } catch (err) {
+      console.log("NO USER DATA ", err);
+    }
     await loadDomains();
   }, []);
-
+  console.log("auth.", auth);
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -200,12 +197,12 @@ function SettingsOrganisation(props) {
         onAddDoamin={onDomainNameSubmit}
         onDelete={handleDeleteDomain}
       />
-      <OrganisationMembers
+      {/* <OrganisationMembers
         organisation={organisation}
         user={auth.user}
         members={members}
         onInvite={onInviteSubmit}
-      />
+      /> */}
     </>
   );
 }

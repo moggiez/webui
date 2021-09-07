@@ -30,6 +30,7 @@ function RunPage(props) {
 
   // State
   const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Loading...");
   const [playbook, setPlaybook] = useState(null);
   const [domains, setDomains] = useState([]);
   const [runState, setRunState] = useState({ type: "none", message: "" });
@@ -52,6 +53,7 @@ function RunPage(props) {
 
   const handleCreateAndRunPlaybook = async (data) => {
     setShowModal(true);
+    setModalTitle("Creating playbook...");
     const createResponse = await playbookSvc.create(data);
     if (createResponse.status === 200) {
       const playbookResponse = await playbookSvc.getById(
@@ -72,6 +74,7 @@ function RunPage(props) {
 
   const runPlaybook = async (selectedPlaybook) => {
     setShowModal(true);
+    setModalTitle("Spawning virtual users ...");
     const activePlaybook = selectedPlaybook || playbook;
     if (activePlaybook) {
       try {
@@ -86,7 +89,7 @@ function RunPage(props) {
           if (runResponse.status === 200) {
             setRunState({
               type: "success",
-              message: "Successfully ran playbook!",
+              message: "Successfully started loadtest. ",
             });
             setLastLoadtestId(loadtestId);
           } else {
@@ -210,13 +213,13 @@ function RunPage(props) {
           className="text-center"
         />
         {runState.type != "none" && !runState.closed && (
-          <Alert variant={runState.type}>{runState.message}</Alert>
-        )}
-        {lastLoadtestId && (
           <Alert variant={runState.type}>
-            <Link href={`/tests/${lastLoadtestId}`}>
-              <a>Go to loadtest results.</a>
-            </Link>
+            {runState.message}
+            {lastLoadtestId && (
+              <Link href={`/tests/${lastLoadtestId}`}>
+                <a>Go to results page.</a>
+              </Link>
+            )}
           </Alert>
         )}
         <Row>
@@ -267,8 +270,8 @@ function RunPage(props) {
         </Row>
         <Modal
           show={showModal}
-          size={"sm"}
-          title={"Creating load test, spawning virtual users ..."}
+          size={"lg"}
+          title={modalTitle}
           content={<Spinner animation="border" variant="primary" />}
         />
       </Container>

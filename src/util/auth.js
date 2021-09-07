@@ -12,6 +12,7 @@ import {
 import { updateUser } from "./db";
 import router from "next/router";
 import analytics from "./analytics";
+import userSvc from "services/userService";
 
 // Whether to merge extra user data from database into auth.user
 const MERGE_DB_USER = true;
@@ -37,6 +38,7 @@ export const useAuth = () => {
 function useAuthProvider() {
   // Store auth user object
   const [user, setUser] = useState(null);
+  const [organisationId, setOrganisationId] = useState(null);
   const [token, setToken] = useState(null);
 
   // Format final user object and merge extra data from database
@@ -48,6 +50,8 @@ function useAuthProvider() {
   const handleAuth = async (user, jwtToken) => {
     setUser(user);
     setToken(jwtToken);
+    const { userData, _ } = await userSvc.getUserData();
+    setOrganisationId(userData.OrganisationId);
     return user;
   };
 

@@ -179,6 +179,14 @@ function OrganisationDomains({
           </Col>
           <Col>{domain && domain.ValidationRecordValue}</Col>
         </Row>
+        <Row>
+          <Col xs={1} md={2} lg={2}>
+            <strong>Expiration:</strong>
+          </Col>
+          <Col>
+            {domain && new Date(domain.ValidationExpirationDate).toUTCString()}
+          </Col>
+        </Row>
       </>
     );
 

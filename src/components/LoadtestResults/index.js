@@ -63,11 +63,6 @@ function LoadtestResults({ id }) {
       } catch (err) {
         console.log(err);
       }
-    }
-  }, [id]);
-
-  useEffect(async () => {
-    if (id) {
       const loadtest = await loadtestSvc.get(id);
       setLoadtest(loadtest);
     }

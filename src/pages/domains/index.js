@@ -23,7 +23,7 @@ function DomainsPage() {
     if (result.success) {
       setFormAlert({
         type: "success",
-        message: `${data.domainName} was added and pending DNS validation. Click on 'Settings' to see information about DNS record you need to add.`,
+        message: `${data.domainName} was added and pending DNS validation. Click on 'Settings' to see information about DNS record you need to add before validation expiration date is reached.`,
       });
     } else {
       setFormAlert({ type: "error", message: result.error });
@@ -37,7 +37,7 @@ function DomainsPage() {
       if (d.status === 200) {
         const newDomains = domains.filter(
           (value) =>
-            value.OrganisationId !== domain.OrganisationId &&
+            value.OrganisationId === domain.OrganisationId &&
             value.DomainName !== domain.DomainName
         );
         setFormAlert({
@@ -60,20 +60,18 @@ function DomainsPage() {
       const domains = await domainsSvc.getAll();
       setDomains(domains);
     } catch (err) {
-      console.log("NO DOMAINS DATA ", err);
+      // console.log("NO DOMAINS DATA ", err);
     }
   };
 
-  useEffect(() => {
-    userService
-      .getUserData()
-      .then(({ userData, session }) => {
-        setOrganisation(userData);
-      })
-      .catch((err) => console.log("NO USER DATA ", err));
-  }, []);
-
   useEffect(async () => {
+    try {
+      const { userData, session } = await userService.getUserData();
+      setOrganisation(userData);
+      console.log("userData", userData);
+    } catch (err) {
+      console.log("NO USER DATA ", err);
+    }
     await loadDomains();
   }, []);
 
