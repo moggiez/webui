@@ -82,6 +82,11 @@ function NavbarCustom(props) {
             {!auth.user && (
               <>
                 <Nav.Item>
+                  <Link href="/auth/signup" passHref={true}>
+                    <Nav.Link active={false}>Sign up</Nav.Link>
+                  </Link>
+                </Nav.Item>
+                <Nav.Item>
                   <Link href="/auth/signin" passHref={true}>
                     <Nav.Link active={false}>Sign in</Nav.Link>
                   </Link>

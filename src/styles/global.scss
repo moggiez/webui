@@ -58,7 +58,7 @@ $grid-breakpoints: (
 
 // Theming React Bootstrap
 .btn {
-  border-radius: 2.2px !important;
+  border-radius: 1.2px !important;
   color: white;
 }
 
@@ -68,4 +68,8 @@ $grid-breakpoints: (
 
 .card {
   border-radius: 2.2px !important;
+}
+
+.form-control {
+  margin-bottom: 5px;
 }
