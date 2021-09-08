@@ -17,7 +17,7 @@ function IndexPage(props) {
         title="Load testing with 0 lines of code."
         subtitle="Built distributed load tests with thousands of virtual users with a few click. Visualize the results and keep track of all loadtests."
         image="/images/illustrations/undraw_data_reports_706v.svg"
-        video="/videos/demo_moggies.mp4"
+        video="/videos/moggies_noaudio.mp4"
         buttonText="Run a load test"
         buttonColor="danger"
         buttonPath="/run"
