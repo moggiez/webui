@@ -44,7 +44,6 @@ function HeroSection(props) {
               .then(() => {})
               .catch(() => {
                 videoParentRef.current.style.display = "none";
-                setShouldUseImage(true);
               });
           }
         }, 0);
