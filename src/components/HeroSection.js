@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, dangerouslySetInnerHTML } from "react";
 import Section from "components/Section";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -6,10 +6,52 @@ import Col from "react-bootstrap/Col";
 import SectionHeader from "components/SectionHeader";
 import Button from "react-bootstrap/Button";
 import Link from "next/link";
-import Image from "react-bootstrap/Image";
 import "components/HeroSection.scss";
 
+const isSafari = () => {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf("safari") > -1 && ua.indexOf("chrome") < 0;
+};
+
 function HeroSection(props) {
+  const videoParentRef = useRef();
+
+  const createVideoTag = () => {
+    return {
+      __html: `
+        <video autoplay loop muted playsinline>
+          <source src='${props.video}' type="video/mp4" />
+        </video>
+      `,
+    };
+  };
+
+  useEffect(() => {
+    if (isSafari() && videoParentRef.current) {
+      const player = videoParentRef.current.children[0];
+
+      if (player) {
+        player.controls = false;
+        player.playsinline = true;
+        player.muted = true;
+        player.setAttribute("muted", "");
+        player.autoplay = true;
+
+        setTimeout(() => {
+          const promise = player.play();
+          if (promise.then) {
+            promise
+              .then(() => {})
+              .catch(() => {
+                videoParentRef.current.style.display = "none";
+                setShouldUseImage(true);
+              });
+          }
+        }, 0);
+      }
+    }
+  }, []);
+
   return (
     <Section
       bg={props.bg}
@@ -39,11 +81,11 @@ function HeroSection(props) {
               <Image src={props.image} fluid={true} />
             </figure>
           </Col> */}
-          <Col>
-            <video width="720" height="480" autoplay="" loop>
-              <source src={props.video} type="video/mp4" />
-            </video>
-          </Col>
+          <Col
+            ref={videoParentRef}
+            className="col-video"
+            dangerouslySetInnerHTML={createVideoTag()}
+          />
         </Row>
       </Container>
     </Section>

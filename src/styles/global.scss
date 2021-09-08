@@ -62,8 +62,17 @@ $grid-breakpoints: (
   color: white;
 }
 
+.btn:hover {
+  color: white;
+}
+
 .btn-link {
   color: map-get($theme-colors, "primary") !important;
+}
+
+.btn-link:hover,
+.nav-link:hover {
+  color: map-get($theme-colors, "danger") !important;
 }
 
 .card {

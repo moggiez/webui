@@ -3,3 +3,14 @@
     max-width: 570px;
   }
 }
+
+.col-video {
+  display: flex;
+  align-items: center;
+}
+
+.col-video > video {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: fill;
+}

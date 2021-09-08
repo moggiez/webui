@@ -18,9 +18,9 @@ function IndexPage(props) {
         subtitle="Built distributed load tests with thousands of virtual users with a few click. Visualize the results and keep track of all loadtests."
         image="/images/illustrations/undraw_data_reports_706v.svg"
         video="/videos/demo_moggies.mp4"
-        buttonText="Get Started"
-        buttonColor="primary"
-        buttonPath="/pricing"
+        buttonText="Run a load test"
+        buttonColor="danger"
+        buttonPath="/run"
       />
       {/* <ClientsSection
         bg="light"

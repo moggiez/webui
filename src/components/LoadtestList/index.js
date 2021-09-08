@@ -4,9 +4,12 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Link from "next/link";
+import { FaTrash } from "react-icons/fa";
 
 import loadtestSvc from "../../services/loadtestService";
 import userSvc from "../../services/userService";
+
+import "./LoadtestList.scss";
 
 function LoadtestList(props) {
   const [data, setData] = useState(null);
@@ -90,16 +93,18 @@ function LoadtestList(props) {
                   <td>{item.CreatedAt}</td>
                   <td>2020-07-09 10:13:55</td>
                   <td>
-                    <Link href={`/tests/${item.LoadtestId}`}>
-                      <a>Results</a>
-                    </Link>
-                    <Button
-                      variant="link"
-                      className="ml-1 p-0 border-0 align-baseline"
-                      onClick={() => handleDeleteClick(item.LoadtestId)}
-                    >
-                      Delete
-                    </Button>
+                    <div className="a">
+                      <Link href={`/tests/${item.LoadtestId}`}>
+                        <a>Results</a>
+                      </Link>
+                      <Button
+                        variant="link"
+                        className="p-0 border-0 align-baseline"
+                        onClick={() => handleDeleteClick(item.LoadtestId)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}

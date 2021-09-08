@@ -1,0 +1,15 @@
+@import "../../styles/global.scss";
+.a {
+  display: flex;
+  align-items: stretch;
+  justify-items: center;
+  flex-wrap: wrap;
+}
+
+.a > button {
+  margin-left: 2px !important;
+}
+
+td a {
+  color: map-get($theme-colors, "primary") !important;
+}
