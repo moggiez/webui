@@ -39,7 +39,14 @@ export default (req, res) => {
     })
     .catch((error) => {
       console.log("contact error", error);
+      const response = {
+        status: "error",
+      };
 
-      res.send({ status: "error" });
+      if (process.env.DEBUG === "TRUE") {
+        response.detail = error;
+        response.env = process.env;
+      }
+      res.send(response);
     });
 };
