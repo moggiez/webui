@@ -44,8 +44,8 @@ export default (req, res) => {
       };
 
       if (process.env.DEBUG === "TRUE") {
-        response.detail = error;
-        response.env = process.env;
+        response["detail"] = error;
+        response["env"] = process.env;
       }
       res.send(response);
     });
