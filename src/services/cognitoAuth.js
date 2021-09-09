@@ -3,7 +3,6 @@ import {
   CognitoUserPool,
   CognitoUser,
   AuthenticationDetails,
-  CookieStorage,
   CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
 const userPoolId = process.env.NEXT_PUBLIC_COGNITO_POOL_ID;
@@ -14,21 +13,15 @@ if (process.env.NEXT_PUBLIC_DOMAIN) {
   domain = process.env.NEXT_PUBLIC_DOMAIN;
 }
 
-const storage = new CookieStorage({
-  domain: domain,
-});
-
 const UserPool = new CognitoUserPool({
   UserPoolId: userPoolId,
   ClientId: clientId,
-  Storage: storage,
 });
 
 const getUserData = (username) => {
   return {
     Pool: UserPool,
     Username: username,
-    Storage: storage,
   };
 };
 
