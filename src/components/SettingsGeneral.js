@@ -53,7 +53,7 @@ function SettingsGeneral(props) {
       .then(({ attributes, _ }) => {
         setUserEmail(attributes.filter((v, i) => v.Name == "email")[0].Value);
       })
-      .catch((err) => console.log("Error getting user attributes: " + err));
+      .catch((err) => console.log("Error getting user attributes."));
   }, []);
 
   return (

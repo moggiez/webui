@@ -22,7 +22,7 @@ function AuthSection(props) {
       linkTextSignin: "Sign in",
     },
     confirm: {
-      title: "Confirm your account",
+      title: "Confirming your account",
       buttonText: "Confirm",
     },
     forgotpass: {
@@ -66,6 +66,7 @@ function AuthSection(props) {
           typeValues={typeValues}
           providers={props.providers}
           afterAuthPath={props.afterAuthPath}
+          afterSignupPath={props.afterSignupPath}
           afterConfirmationPath={"/auth/signin"}
           key={currentType}
         />

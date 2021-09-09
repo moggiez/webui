@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormAlert from "components/FormAlert";
 import AuthForm from "components/AuthForm";
 import AuthSocial from "components/AuthSocial";
@@ -9,17 +9,46 @@ function Auth(props) {
   const router = useRouter();
   const [formAlert, setFormAlert] = useState(null);
 
-  const handleAuth = (authToken) => {
+  const handleSignup = (data) => {
+    let path = props.afterSignupPath;
+    if (data && data.Session === null) {
+      path += "#afterSignup";
+    }
+    router.push(path);
+  };
+
+  const handleAuth = () => {
     router.push(props.afterAuthPath);
   };
 
-  const handleConfirmation = () => {
-    router.push(props.afterConfirmationPath);
+  const handleConfirmation = (data) => {
+    router.push(`${props.afterConfirmationPath}#confirmed`);
   };
 
   const handleFormAlert = (data) => {
     setFormAlert(data);
   };
+
+  useEffect(() => {
+    if (router && router.asPath) {
+      const parts = router.asPath.split("#");
+      if (parts.length > 1) {
+        if (parts[1] === "afterSignup") {
+          setFormAlert({
+            type: "success",
+            message:
+              "We've sent you an email containing a link to confirm your account. Please check your email.",
+          });
+        } else if (parts[1] === "confirmed") {
+          setFormAlert({
+            type: "success",
+            message:
+              "Your account has been confirmed. Please login with your credentials.",
+          });
+        }
+      }
+    }
+  }, [router.query.id]);
 
   return (
     <>
@@ -31,6 +60,7 @@ function Auth(props) {
         type={props.type}
         typeValues={props.typeValues}
         onAuth={handleAuth}
+        onSignup={handleSignup}
         onFormAlert={handleFormAlert}
         onConfirmation={handleConfirmation}
       />

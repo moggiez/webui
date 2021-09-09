@@ -68,9 +68,8 @@ function DomainsPage() {
     try {
       const { userData, session } = await userService.getUserData();
       setOrganisation(userData);
-      console.log("userData", userData);
     } catch (err) {
-      console.log("NO USER DATA ", err);
+      // console.log("NO USER DATA ", err);
     }
     await loadDomains();
   }, []);

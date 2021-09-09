@@ -15,15 +15,14 @@ function AuthForm(props) {
   const submitHandlersByType = {
     signin: ({ email, pass }) => {
       return auth.signin(email, pass).then((jwtToken) => {
-        props.onAuth(jwtToken);
+        props.onAuth();
       });
     },
     signup: ({ email, pass }) => {
-      return auth.signup(email, pass).then((data) => props.onAuth(data));
+      return auth.signup(email, pass).then((data) => props.onSignup(data));
     },
     confirm: ({}) => {
       return new Promise((resolve, reject) => {
-        alert("Confirm!");
         resolve("Great success!");
       }).then((data) =>
         // Call auth complete handler

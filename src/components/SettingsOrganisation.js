@@ -88,7 +88,7 @@ function SettingsOrganisation(props) {
       const domains = await domainsSvc.getAll();
       setDomains(domains);
     } catch (err) {
-      console.log("NO DOMAINS DATA ", err);
+      // console.log("NO DOMAINS DATA ", err);
     }
   };
 
@@ -131,11 +131,10 @@ function SettingsOrganisation(props) {
       const { userData, session } = await userService.getUserData();
       setOrganisation(userData);
     } catch (err) {
-      console.log("NO USER DATA ", err);
+      // console.log("NO USER DATA ", err);
     }
     await loadDomains();
   }, []);
-  console.log("auth.", auth);
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
