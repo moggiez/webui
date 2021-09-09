@@ -12,7 +12,7 @@ function Page404() {
             <img
               src="/images/illustrations/not_found.svg"
               alt="not found cat in a box"
-              width="640"
+              width="320"
             />
           </Col>
         </Row>
