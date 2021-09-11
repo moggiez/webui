@@ -3,6 +3,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Chart from "react-google-charts";
 import Container from "react-bootstrap/Container";
+import { Line } from "react-chartjs-2";
+
 import Link from "next/link";
 
 import metricsSvc from "../../services/metricsService";
@@ -10,16 +12,44 @@ import loadtestSvc from "../../services/loadtestService";
 
 function LoadtestResults({ id }) {
   const [responseTimeData, setResponseTimeData] = useState(null);
+  const [lineChartData, setLineChartData] = useState(null);
   const [showChart, setShowChart] = useState(false);
   const [refreshEnabled, setRefreshEnabled] = useState(true);
   const [dataSource, setDataSource] = useState("N/A");
   const [loadtest, setLoadtest] = useState(null);
 
+  const setChartData = (data) => {
+    setResponseTimeData(data);
+    const timestamps = [];
+    const responseTimes = [];
+    data.forEach((value, index) => {
+      if (index > 0) {
+        timestamps.push(value[0]);
+        responseTimes.push(value[1]);
+      }
+    });
+    const lcData = {
+      labels: timestamps,
+      datasets: [
+        {
+          label: "Response time",
+          data: responseTimes,
+          fill: false,
+          backgroundColor: "#ec5471",
+          borderColor: "#ec5471",
+          cubicInterpolationMode: "monotone",
+          tension: 0.4,
+        },
+      ],
+    };
+    setLineChartData(lcData);
+  };
+
   const handleRefresh = () => {
     setRefreshEnabled(false);
     loadMetricsData(id)
       .then(({ data, source }) => {
-        setResponseTimeData(data);
+        setChartData(data);
         setDataSource(source);
         setRefreshEnabled(true);
       })
@@ -57,7 +87,9 @@ function LoadtestResults({ id }) {
     if (id) {
       try {
         const { data, source } = await loadMetricsData(id);
-        setResponseTimeData(data);
+        if (data != responseTimeData) {
+          setChartData(data);
+        }
         setDataSource(source);
         setShowChart(true);
       } catch (err) {
@@ -68,52 +100,58 @@ function LoadtestResults({ id }) {
     }
   }, [id]);
 
+  const options = {
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+
+  const LineChart = () => (
+    <>{responseTimeData && <Line data={lineChartData} options={options} />}</>
+  );
+
   return (
     <Container>
       {!responseTimeData && <div>Loading data...</div>}
       {responseTimeData && (
-        <Row>
-          <Col>
-            <Chart
-              width={"800px"}
-              height={"400px"}
-              chartType="LineChart"
-              loader={<div>Loading chart...</div>}
-              data={responseTimeData}
-              options={{
-                hAxis: {
-                  title: "Date and time",
-                },
-                vAxis: {
-                  title: "Response time (ms)",
-                },
-              }}
-              rootProps={{ "data-testid": "1" }}
-            />
-          </Col>
-          <Col>
+        <>
+          <Row>
             <Row>
-              <Col xs={2} md={2} lg={2}>
-                <strong>Playbook:</strong>
-              </Col>
-              <Col xs={10} md={10} lg={10}>
-                {!loadtest && <span>loading...</span>}
-                {loadtest && (
-                  <Link href={`/playbooks/${loadtest.PlaybookId}`}>link</Link>
-                )}
+              <Col>
+                <LineChart />
               </Col>
             </Row>
-            <Row>
-              <Col xs={2} md={2} lg={2}>
-                <strong>Job Id:</strong>
-              </Col>
-              <Col xs={10} md={10} lg={10}>
-                {!loadtest && <span>loading...</span>}
-                {loadtest && <>{loadtest.JobId}</>}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+            <Col>
+              <Row>
+                <Col xs={2} md={2} lg={2}>
+                  <strong>Playbook:</strong>
+                </Col>
+                <Col xs={10} md={10} lg={10}>
+                  {!loadtest && <span>loading...</span>}
+                  {loadtest && (
+                    <Link href={`/playbooks/${loadtest.PlaybookId}`}>link</Link>
+                  )}
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={2} md={2} lg={2}>
+                  <strong>Job Id:</strong>
+                </Col>
+                <Col xs={10} md={10} lg={10}>
+                  {!loadtest && <span>loading...</span>}
+                  {loadtest && <>{loadtest.JobId}</>}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </>
       )}
     </Container>
   );

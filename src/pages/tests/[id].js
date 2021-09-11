@@ -10,13 +10,7 @@ function LoadtestPage() {
   const router = useRouter();
 
   return (
-    <Section
-      bg="white"
-      textColor="dark"
-      size="md"
-      bgImage=""
-      bgImageOpacity={1}
-    >
+    <Section bg="white" textColor="dark" bgImage="" bgImageOpacity={1}>
       {router.query.id && router.query.id != "all" && (
         <LoadtestResults id={router.query.id} />
       )}
