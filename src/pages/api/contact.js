@@ -1,8 +1,8 @@
 const aws = require("aws-sdk");
 
 aws.config.update({
-  accessKeyId: process.env.AMAZON_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AMAZON_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
   region: "eu-west-1",
 });
 
@@ -13,8 +13,8 @@ export default (req, res) => {
   const body = req.body;
 
   const params = {
-    Source: process.env.AMAZON_SES_CONTACT_EMAIL,
-    Destination: { ToAddresses: [process.env.AMAZON_SES_CONTACT_EMAIL] },
+    Source: process.env.NEXT_PUBLIC_SES_CONTACT_EMAIL,
+    Destination: { ToAddresses: [process.env.NEXT_PUBLIC_SES_CONTACT_EMAIL] },
     Message: {
       Subject: {
         Data: `Contact form submission`,
